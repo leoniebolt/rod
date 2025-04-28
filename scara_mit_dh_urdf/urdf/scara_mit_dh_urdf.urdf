@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="scara_mit_dh_urdf">
+
+  <link name='world'/> 
+  <joint name="fixedToWorld" type="fixed">
+    <origin
+      xyz="0 0 1"
+      rpy="0 0 0" />
+    <parent link="world" />
+    <child link="base_link" />
+  </joint>
+
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-3.99506576600143E-18 5.33137969018105E-18 0.180234931906412"
+        rpy="0 0 0" />
+      <mass
+        value="50.5064528015554" />
+      <inertia
+        ixx="0.507467643046138"
+        ixy="2.23371852613819E-18"
+        ixz="-2.20689887022559E-17"
+        iyy="0.507467643046138"
+        iyz="7.80868643803156E-18"
+        izz="0.164615591191858" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://scara_mit_dh_urdf/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.650980392156863 0.619607843137255 0.588235294117647 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://scara_mit_dh_urdf/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="l1">
+    <inertial>
+      <origin
+        xyz="0.120817727289337 9.30999931508023E-07 0.0513770238788596"
+        rpy="0 0 0" />
+      <mass
+        value="49.5926714803606" />
+      <inertia
+        ixx="0.222900609838824"
+        ixy="2.0310593816954E-17"
+        ixz="0.0739678064109204"
+        iyy="0.736885929341891"
+        iyz="6.2640615149761E-18"
+        izz="0.8650916120764" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://scara_mit_dh_urdf/meshes/l1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.650980392156863 0.619607843137255 0.588235294117647 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://scara_mit_dh_urdf/meshes/l1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j1"
+    type="revolute">
+    <origin
+      xyz="0 -0.375 0"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="l1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.7"
+      upper="2.7"
+      effort="10000"
+      velocity="1" />
+    <dynamics
+      damping="0.2"
+      friction="0.5" />
+  </joint>
+  <link
+    name="l2">
+    <inertial>
+      <origin
+        xyz="-0.112811619112 2.03690357156592E-08 -0.08488266623816"
+        rpy="0 0 0" />
+      <mass
+        value="32.5846948095504" />
+      <inertia
+        ixx="0.16446281982603"
+        ixy="-2.66721834411411E-07"
+        ixz="0.00501596079265974"
+        iyy="0.377276755482314"
+        iyz="1.55740958096566E-07"
+        izz="0.328743826647255" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://scara_mit_dh_urdf/meshes/l2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.949019607843137 0.898039215686275 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://scara_mit_dh_urdf/meshes/l2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j2"
+    type="revolute">
+    <origin
+      xyz="0.325 0 0.06"
+      rpy="3.1416 0 3.1416" />
+    <parent
+      link="l1" />
+    <child
+      link="l2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.7"
+      upper="2.7"
+      effort="10000"
+      velocity="1" />
+    <dynamics
+      damping="0.2"
+      friction="0.5" />
+  </joint>
+  <link
+    name="l3">
+    <inertial>
+      <origin
+        xyz="-1.11022302462516E-16 3.84661319935812E-17 -0.185"
+        rpy="0 0 0" />
+      <mass
+        value="0.460306155603976" />
+      <inertia
+        ixx="0.00526283371240546"
+        ixy="1.18856148373066E-37"
+        ixz="-6.80626111769164E-20"
+        iyy="0.00526283371240546"
+        iyz="2.77378988674234E-34"
+        izz="2.30153077801988E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://scara_mit_dh_urdf/meshes/l3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.949019607843137 0.898039215686275 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://scara_mit_dh_urdf/meshes/l3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j3"
+    type="prismatic">
+    <origin
+      xyz="-0.225 0 0.06926"
+      rpy="0 0 0" />
+    <parent
+      link="l2" />
+    <child
+      link="l3" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="290"
+      effort="10000"
+      velocity="1" />
+    <dynamics
+      damping="0.2"
+      friction="0.5" />
+  </joint>
+  <link
+    name="l4">
+    <inertial>
+      <origin
+        xyz="-3.33066907387547E-16 4.16333634234434E-17 0.0115960504326883"
+        rpy="0 0 0" />
+      <mass
+        value="0.00734707672394354" />
+      <inertia
+        ixx="1.56955034877565E-06"
+        ixy="-1.85288457211878E-22"
+        ixz="-2.27667438887459E-22"
+        iyy="1.56955034877565E-06"
+        iyz="-6.48270541037055E-23"
+        izz="2.46567234921726E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://scara_mit_dh_urdf/meshes/l4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.298039215686275 0.298039215686275 0.298039215686275 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://scara_mit_dh_urdf/meshes/l4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="j4"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 -3.0137" />
+    <parent
+      link="l3" />
+    <child
+      link="l4" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-6.2"
+      upper="6.2"
+      effort="10000"
+      velocity="1" />
+    <dynamics
+      damping="0.2"
+      friction="0.5" />
+  </joint>
+
+    <transmission name="trans_j1">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="j1">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="j1_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_j2">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="j2">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="j2_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_j3">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="j3">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="j3_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_j4">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="j4">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="j4_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    
+    <!--Gazebo Plugins -->
+    <gazebo>
+        <plugin name="control" filename="libgazebo_ros_control.so">
+        </plugin>
+    </gazebo>
+    <gazebo>
+        <plugin name = "joint_state_publisher" filename = "libgazebo_ros_joint_state_publisher.so" >
+		<jointName>j1, j2, j3, j4</jointName>
+        </plugin>
+    </gazebo>
+
+</robot>
