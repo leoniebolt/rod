@@ -1,0 +1,11 @@
+controller_list:
+  - name: scara_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: True
+    joints:
+      - arm1
+      - arm2
+      - arm3
+      - arm4
+      - Saugnapf
