@@ -1,0 +1,15 @@
+controller_list:
+  - name: fake_sixAxis_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - arm_1
+      - arm_2
+      - arm_3
+      - arm_4
+      - arm_5
+      - arm_6
+      - Zange1
+      - Zang2
+initial:  # Define initial robot poses per group
+  - group: sixAxis
+    pose: homep
