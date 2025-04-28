@@ -1,0 +1,2322 @@
+<sdf version='1.7'>
+  <world name='default'>
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <contact>
+              <collide_bitmask>65535</collide_bitmask>
+              <ode/>
+            </contact>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <physics type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+    </scene>
+    <wind/>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>0</latitude_deg>
+      <longitude_deg>0</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <model name='scara_robot'>
+      <link name='base_link'>
+        <inertial>
+          <pose>-0 -0.163771 0 0 -0 0</pose>
+          <mass>46.1323</mass>
+          <inertia>
+            <ixx>0.490072</ixx>
+            <ixy>2.20663e-17</ixy>
+            <ixz>2.19476e-18</ixz>
+            <iyy>0.131264</iyy>
+            <iyz>1.39915e-17</iyz>
+            <izz>0.490072</izz>
+          </inertia>
+        </inertial>
+        <collision name='base_link_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/scara_mit_dh_urdf/meshes/base_link.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='base_link_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/scara_mit_dh_urdf/meshes/base_link.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm1' type='revolute'>
+        <pose relative_to='base_link'>0 -0.33 0 -1.57079 -1.57079 -3.14159</pose>
+        <parent>base_link</parent>
+        <child>joint_1</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_1'>
+        <pose relative_to='arm1'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0 0 0.023874 0 -0 0</pose>
+          <mass>4.37416</mass>
+          <inertia>
+            <ixx>0.0173959</ixx>
+            <ixy>0</ixy>
+            <ixz>-2.70662e-19</ixz>
+            <iyy>0.0173959</iyy>
+            <iyz>-8.65983e-35</iyz>
+            <izz>0.033352</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_1_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/scara_mit_dh_urdf/meshes/joint_1.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_1_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/scara_mit_dh_urdf/meshes/joint_1.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm2' type='revolute'>
+        <pose relative_to='joint_1'>0 0 0.045 0 0 -1.5708</pose>
+        <parent>joint_1</parent>
+        <child>joint_2</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_2'>
+        <pose relative_to='arm2'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0.120818 1e-06 0.051377 0 -0 0</pose>
+          <mass>49.5927</mass>
+          <inertia>
+            <ixx>0.222901</ixx>
+            <ixy>-3.81944e-18</ixy>
+            <ixz>0.0739678</ixz>
+            <iyy>0.736886</iyy>
+            <iyz>4.27095e-18</iyz>
+            <izz>0.865092</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_2_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/scara_mit_dh_urdf/meshes/joint_2.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_2_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/scara_mit_dh_urdf/meshes/joint_2.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm3' type='revolute'>
+        <pose relative_to='joint_2'>0.325 0 0.06 -3.14159 -0 -3.14159</pose>
+        <parent>joint_2</parent>
+        <child>joint_3</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_3'>
+        <pose relative_to='arm3'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0.112812 0 -0.084883 0 -0 0</pose>
+          <mass>32.5847</mass>
+          <inertia>
+            <ixx>0.164463</ixx>
+            <ixy>-2.66722e-07</ixy>
+            <ixz>0.00501596</ixz>
+            <iyy>0.377277</iyy>
+            <iyz>1.55741e-07</iyz>
+            <izz>0.328744</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_3_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/scara_mit_dh_urdf/meshes/joint_3.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_3_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/scara_mit_dh_urdf/meshes/joint_3.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm4' type='prismatic'>
+        <pose relative_to='joint_3'>-0.225 0 0.06926 0 -0 0</pose>
+        <parent>joint_3</parent>
+        <child>joint_4</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_4'>
+        <pose relative_to='arm4'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0 0 -0.185 0 -0 0</pose>
+          <mass>0.460306</mass>
+          <inertia>
+            <ixx>0.00526283</ixx>
+            <ixy>-4.60149e-34</ixy>
+            <ixz>-1.79134e-18</ixz>
+            <iyy>0.00526283</iyy>
+            <iyz>-1.33054e-18</iyz>
+            <izz>2.30153e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_4_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/scara_mit_dh_urdf/meshes/joint_4.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_4_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/scara_mit_dh_urdf/meshes/joint_4.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='Saugnapf' type='revolute'>
+        <pose relative_to='joint_4'>0 0 0 0 0 -0.27762</pose>
+        <parent>joint_4</parent>
+        <child>Gripper</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='Gripper'>
+        <pose relative_to='Saugnapf'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0 0 0.011596 0 -0 0</pose>
+          <mass>0.00734708</mass>
+          <inertia>
+            <ixx>1.56955e-06</ixx>
+            <ixy>-7.94093e-23</ixy>
+            <ixz>1.42239e-22</ixz>
+            <iyy>1.56955e-06</iyy>
+            <iyz>5.18325e-23</iyz>
+            <izz>2.46567e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='Gripper_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/scara_mit_dh_urdf/meshes/Gripper.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Gripper_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/scara_mit_dh_urdf/meshes/Gripper.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-1 0 0 0 -0 0</pose>
+    </model>
+    <model name='six_axis_robot'>
+      <link name='base_link'>
+        <inertial>
+          <pose>0.079875 -0.079 0.073672 0 -0 0</pose>
+          <mass>2.7451</mass>
+          <inertia>
+            <ixx>0.00962158</ixx>
+            <ixy>-3.60983e-19</ixy>
+            <ixz>0.000162466</ixz>
+            <iyy>0.00976445</iyy>
+            <iyz>6.34864e-19</iyz>
+            <izz>0.00791026</izz>
+          </inertia>
+        </inertial>
+        <collision name='base_link_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/base_link.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='base_link_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/base_link.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm_1' type='revolute'>
+        <pose relative_to='base_link'>0.084 -0.079 0.1585 0 0 -3.14159</pose>
+        <parent>base_link</parent>
+        <child>joint_1</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_1'>
+        <pose relative_to='arm_1'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0.001296 0.001353 0.065878 0 -0 0</pose>
+          <mass>2.61497</mass>
+          <inertia>
+            <ixx>0.0125509</ixx>
+            <ixy>9.11703e-05</ixy>
+            <ixz>0.00102826</ixz>
+            <iyy>0.0113026</iyy>
+            <iyz>-0.000350125</iyz>
+            <izz>0.00997314</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_1_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/joint_1.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_1_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/joint_1.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm_2' type='revolute'>
+        <pose relative_to='joint_1'>-0.027064 -0.001 0.16483 1.5708 -0 0</pose>
+        <parent>joint_1</parent>
+        <child>joint_2</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_2'>
+        <pose relative_to='arm_2'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0 0.129202 -0.000178 0 -0 0</pose>
+          <mass>2.41745</mass>
+          <inertia>
+            <ixx>0.0124923</ixx>
+            <ixy>2.99448e-10</ixy>
+            <ixz>-1.55104e-09</ixz>
+            <iyy>0.00626764</iyy>
+            <iyz>0.00040958</iyz>
+            <izz>0.00827354</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_2_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/joint_2.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_2_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/joint_2.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm_3' type='revolute'>
+        <pose relative_to='joint_2'>0 0.278 0 3.14159 -1.57079 -2.92651</pose>
+        <parent>joint_2</parent>
+        <child>joint_3</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_3'>
+        <pose relative_to='arm_3'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0.002387 0.01772 -0.007832 0 -0 0</pose>
+          <mass>1.53803</mass>
+          <inertia>
+            <ixx>0.00395288</ixx>
+            <ixy>1.48351e-05</ixy>
+            <ixz>-1.77849e-05</ixz>
+            <iyy>0.0035114</iyy>
+            <iyz>-0.00034487</iyz>
+            <izz>0.00297829</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_3_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/joint_3.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_3_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/joint_3.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm_4' type='revolute'>
+        <pose relative_to='joint_3'>0 0.044548 0.053986 0.21508 -0 -3.14159</pose>
+        <parent>joint_3</parent>
+        <child>joint_4</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_4'>
+        <pose relative_to='arm_4'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0.000288 -0 0.115107 0 -0 0</pose>
+          <mass>1.65439</mass>
+          <inertia>
+            <ixx>0.00939546</ixx>
+            <ixy>1.53549e-09</ixy>
+            <ixz>-6.63031e-05</ixz>
+            <iyy>0.00988811</iyy>
+            <iyz>-2.80874e-10</iyz>
+            <izz>0.00237982</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_4_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/joint_4.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_4_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/joint_4.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm_5' type='revolute'>
+        <pose relative_to='joint_4'>0 0 0.2545 -1.5708 0.017333 -1.5708</pose>
+        <parent>joint_4</parent>
+        <child>joint_5</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_5'>
+        <pose relative_to='arm_5'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0 -0.014598 -0.001257 0 -0 0</pose>
+          <mass>0.378542</mass>
+          <inertia>
+            <ixx>0.000418706</ixx>
+            <ixy>-1.44552e-10</ixy>
+            <ixz>3.14606e-10</ixz>
+            <iyy>0.000256662</iyy>
+            <iyz>6.94363e-06</iyz>
+            <izz>0.000438888</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_5_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/joint_5.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_5_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/joint_5.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm_6' type='revolute'>
+        <pose relative_to='joint_5'>0 -0.049316 0 1.5708 -0 0</pose>
+        <parent>joint_5</parent>
+        <child>joint_6</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_6'>
+        <pose relative_to='arm_6'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0 -0 0.023857 0 -0 0</pose>
+          <mass>0.0623937</mass>
+          <inertia>
+            <ixx>2.09776e-05</ixx>
+            <ixy>1.75e-07</ixy>
+            <ixz>-1.18055e-20</ixz>
+            <iyy>2.21246e-05</iyy>
+            <iyz>-2.58494e-21</iyz>
+            <izz>2.84483e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_6_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/joint_6.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_6_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/joint_6.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='Zange1' type='prismatic'>
+        <pose relative_to='joint_6'>0 0 0.010664 0 0 -3.14159</pose>
+        <parent>joint_6</parent>
+        <child>Gripper1</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='Gripper1'>
+        <pose relative_to='Zange1'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0.02125 -0.00575 0.02802 0 -0 0</pose>
+          <mass>0.008</mass>
+          <inertia>
+            <ixx>1.57083e-06</ixx>
+            <ixy>8.75e-08</ixy>
+            <ixz>7.75e-07</ixz>
+            <iyy>2.17083e-06</iyy>
+            <iyz>-1.75e-07</iyz>
+            <izz>9.08333e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='Gripper1_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/Gripper1.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Gripper1_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/Gripper1.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='Zang2' type='prismatic'>
+        <pose relative_to='Gripper1'>0 0 0 0 0 -3.14159</pose>
+        <parent>Gripper1</parent>
+        <child>Gripper2</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='Gripper2'>
+        <pose relative_to='Zang2'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0.02125 -0.00575 0.02802 0 -0 0</pose>
+          <mass>0.008</mass>
+          <inertia>
+            <ixx>1.57083e-06</ixx>
+            <ixy>8.75e-08</ixy>
+            <ixz>7.75e-07</ixz>
+            <iyy>2.17083e-06</iyy>
+            <iyz>-1.75e-07</iyz>
+            <izz>9.08333e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='Gripper2_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/Gripper2.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Gripper2_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/fhtw_user/catkin_ws/src/fhtw/rod/six_axis_robot_urdf/meshes/Gripper2.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>1 0 0 0 -0 0</pose>
+    </model>
+    <model name='unit_box'>
+      <pose>-0.601463 -2.01957 0.5 0 -0 0</pose>
+      <link name='link'>
+        <inertial>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.166667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.166667</iyy>
+            <iyz>0</iyz>
+            <izz>0.166667</izz>
+          </inertia>
+          <pose>0 0 0 0 -0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Grey</name>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+    <state world_name='default'>
+      <sim_time>203 609000000</sim_time>
+      <real_time>128 402202820</real_time>
+      <wall_time>1744961639 23819480</wall_time>
+      <iterations>125043</iterations>
+      <model name='ground_plane'>
+        <pose>0 0 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>0 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='scara_robot'>
+        <pose>-1.57862 -0.697027 -76615.7 2.8314 -0.758403 -0.243253</pose>
+        <scale>1 1 1</scale>
+        <link name='Gripper'>
+          <pose>-1.03319 -0.473322 -76615.4 -1.31488 0.50176 2.8065</pose>
+          <velocity>0.294802 -1.21382 -1226.21 0.212831 0.459708 -0.479271</velocity>
+          <acceleration>909.968 -1370.48 -1970.67 0.301851 -0.078195 0.205356</acceleration>
+          <wrench>6.68561 -10.069 -14.4787 0 -0 0</wrench>
+        </link>
+        <link name='base_link'>
+          <pose>-1.57862 -0.697027 -76615.7 2.8314 -0.758403 -0.243253</pose>
+          <velocity>-0.206728 0.229286 -1225.87 2.80204 1.32539 -0.591856</velocity>
+          <acceleration>-1.96605 0.231473 -6.20926 -2.11353 0.551656 1.06067</acceleration>
+          <wrench>-90.6985 10.6784 -286.447 0 -0 0</wrench>
+        </link>
+        <link name='joint_1'>
+          <pose>-1.43569 -0.408713 -76615.8 -1.88246 0.763281 -0.679377</pose>
+          <velocity>-0.133473 0.350077 -1225.25 2.80552 1.32318 -0.593033</velocity>
+          <acceleration>-0.164441 -3.10555 -11.9331 -1.68854 1.29025 2.51247</acceleration>
+          <wrench>-0.719293 -13.5842 -52.1971 0 -0 0</wrench>
+        </link>
+        <link name='joint_2'>
+          <pose>-1.4162 -0.369397 -76615.8 -1.881 -0.7584 -0.243259</pose>
+          <velocity>-0.123014 0.366509 -1225.17 2.7945 1.3313 -0.588695</velocity>
+          <acceleration>-0.089874 -0.646096 -14.0547 -1.23042 -0.852795 -1.53738</acceleration>
+          <wrench>-4.45709 -32.0417 -697.008 0 -0 0</wrench>
+        </link>
+        <link name='joint_3'>
+          <pose>-1.16122 -0.373806 -76615.6 -1.26059 0.758397 2.89833</pose>
+          <velocity>0.15466 -0.371282 -1225.52 2.79402 1.33187 -0.589052</velocity>
+          <acceleration>-2.52809 7.69338 -15.1087 0.138585 -1.42838 0.887659</acceleration>
+          <wrench>-82.3772 250.686 -492.312 0 -0 0</wrench>
+        </link>
+        <link name='joint_4'>
+          <pose>-1.03311 -0.473322 -76615.4 -1.25669 0.768436 2.90312</pose>
+          <velocity>0.333326 -1.23701 -1226.24 0.072703 0.884405 -0.814834</velocity>
+          <acceleration>372.723 -446.811 516.088 -3.13459 -0.949602 3.07572</acceleration>
+          <wrench>171.566 -205.67 237.558 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='scara_robot_v2'>
+        <pose>1.22622 -2.26913 0.043887 -1.57078 0.625074 0.763901</pose>
+        <scale>1 1 1</scale>
+        <link name='Gripper'>
+          <pose>1.70249 -1.81828 0.026648 3.01323 -0.209244 -2.05713</pose>
+          <velocity>0.543898 -0.282544 -0.201017 -2.15212 -1.23933 -2.88606</velocity>
+          <acceleration>1326.69 -1034.05 -243.197 2.44926 -1.55801 0.202436</acceleration>
+          <wrench>9.74732 -7.59723 -1.78679 0 -0 0</wrench>
+        </link>
+        <link name='base_link'>
+          <pose>1.22622 -2.26913 0.043887 -1.57078 0.625074 0.763901</pose>
+          <velocity>0.000117 0.000604 0.009695 -0.012776 0.003848 -0.001394</velocity>
+          <acceleration>-1.70785 2.00574 18.6007 -0.255354 1.15979 -0.955995</acceleration>
+          <wrench>-78.787 92.5293 858.093 0 -0 0</wrench>
+        </link>
+        <link name='joint_1'>
+          <pose>1.36566 -2.13556 0.311492 0.625098 4e-06 2.33468</pose>
+          <velocity>0.001922 0.003562 0.007262 -0.017068 -0.003199 -0.017119</velocity>
+          <acceleration>0.670773 7.12242 14.8165 2.11164 -0.094371 -1.04398</acceleration>
+          <wrench>2.93407 31.1546 64.8096 0 -0 0</wrench>
+        </link>
+        <link name='joint_2'>
+          <pose>1.38468 -2.11735 0.347983 4e-05 0.625021 0.763903</pose>
+          <velocity>0.002278 0.003464 0.007027 -0.016669 0.009731 -0.008998</velocity>
+          <acceleration>1.33833 5.035 9.29519 2.28701 0.631918 -1.1192</acceleration>
+          <wrench>66.3715 249.699 460.974 0 -0 0</wrench>
+        </link>
+        <link name='joint_3'>
+          <pose>1.60036 -1.91075 0.206477 3.14155 -0.625017 -2.37769</pose>
+          <velocity>0.002717 -0.000825 0.001426 -0.016345 0.010823 -0.008459</velocity>
+          <acceleration>1.19914 -1.34055 -3.67293 1.08898 -0.047035 -2.21975</acceleration>
+          <wrench>39.0736 -43.6815 -119.681 0 -0 0</wrench>
+        </link>
+        <link name='joint_4'>
+          <pose>1.70385 -1.81671 0.020306 -3.13008 -0.635053 -2.37786</pose>
+          <velocity>0.185735 0.108761 -0.086269 2.79423 -1.38634 0.938876</velocity>
+          <acceleration>71.8597 -16.5303 47.5245 -1.07505 0.405137 -2.5264</acceleration>
+          <wrench>33.0774 -7.60898 21.8758 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='six_axis_robot'>
+        <pose>0.822319 -0.21833 -76615.7 0.77146 -0.741577 1.09784</pose>
+        <scale>1 1 1</scale>
+        <link name='Gripper1'>
+          <pose>1.30647 -0.365816 -76615.1 0.644177 0.543175 2.04931</pose>
+          <velocity>-0.001911 -0.004466 -1225.42 0.010298 -0.004649 0.008972</velocity>
+          <acceleration>-3e-06 -5.1e-05 -9.80001 -3.2e-05 -7.5e-05 0.00012</acceleration>
+          <wrench>-0 -0 -0.0784 0 -0 0</wrench>
+        </link>
+        <link name='Gripper2'>
+          <pose>1.30647 -0.365816 -76615.1 -0.644179 -0.543173 -1.09228</pose>
+          <velocity>-0.001911 -0.004466 -1225.42 0.010298 -0.004649 0.008972</velocity>
+          <acceleration>-3e-06 -5.3e-05 -9.80002 -2e-05 -0.000201 -5.6e-05</acceleration>
+          <wrench>-0 -0 -0.0784 0 -0 0</wrench>
+        </link>
+        <link name='base_link'>
+          <pose>0.822319 -0.21833 -76615.7 0.77146 -0.741577 1.09784</pose>
+          <velocity>-0.00033 -0.002376 -1225.42 0.010298 -0.004649 0.008972</velocity>
+          <acceleration>1e-06 -1.1e-05 -9.8 3.2e-05 -4.6e-05 -4.2e-05</acceleration>
+          <wrench>2e-06 -3e-05 -26.902 0 -0 0</wrench>
+        </link>
+        <link name='joint_1'>
+          <pose>0.98131 -0.274529 -76615.6 -0.771458 0.741578 -2.04375</pose>
+          <velocity>-0.000291 -0.001979 -1225.42 0.010298 -0.004649 0.008972</velocity>
+          <acceleration>0 -1e-06 -9.8 2.7e-05 -3.3e-05 -3.2e-05</acceleration>
+          <wrench>1e-06 -2e-06 -25.6267 0 -0 0</wrench>
+        </link>
+        <link name='joint_2'>
+          <pose>1.05549 -0.380256 -76615.5 0.799342 0.741578 -2.04375</pose>
+          <velocity>0.000166 -0.002404 -1225.42 0.010298 -0.004649 0.008972</velocity>
+          <acceleration>0 1.1e-05 -9.8 5.8e-05 -2e-06 -7e-05</acceleration>
+          <wrench>0 2.7e-05 -23.691 0 -0 0</wrench>
+        </link>
+        <link name='joint_3'>
+          <pose>1.16671 -0.588382 -76615.3 0.879154 -0.539964 -3.03336</pose>
+          <velocity>0.00135 -0.00292 -1225.42 0.010298 -0.004649 0.008972</velocity>
+          <acceleration>0 2.5e-05 -9.8 2e-06 -4.8e-05 -1.5e-05</acceleration>
+          <wrench>0 3.8e-05 -15.0727 0 -0 0</wrench>
+        </link>
+        <link name='joint_4'>
+          <pose>1.20042 -0.571474 -76615.3 -0.664073 0.539966 0.108231</pose>
+          <velocity>0.000924 -0.003224 -1225.42 0.010298 -0.004649 0.008972</velocity>
+          <acceleration>-1e-06 -9e-06 -9.80001 -3.3e-05 -6.3e-05 6e-05</acceleration>
+          <wrench>-2e-06 -1.5e-05 -16.213 0 -0 0</wrench>
+        </link>
+        <link name='joint_5'>
+          <pose>1.28591 -0.404406 -76615.1 -2.21498 -0.543176 -1.09228</pose>
+          <velocity>-0.001374 -0.004228 -1225.42 0.010298 -0.004649 0.008972</velocity>
+          <acceleration>-2e-06 -3.8e-05 -9.80001 -1.3e-05 -5.2e-05 -2.6e-05</acceleration>
+          <wrench>-1e-06 -1.5e-05 -3.70972 0 -0 0</wrench>
+        </link>
+        <link name='joint_6'>
+          <pose>1.30282 -0.372677 -76615.1 -0.644176 -0.543176 -1.09228</pose>
+          <velocity>-0.001816 -0.004424 -1225.42 0.010298 -0.004649 0.008972</velocity>
+          <acceleration>-3e-06 -5e-05 -9.80002 4.3e-05 -2.4e-05 -4.8e-05</acceleration>
+          <wrench>-0 -3e-06 -0.611459 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='six_axis_robot_v2'>
+        <pose>0.57496 -0.304744 -4e-06 -6e-06 9e-06 0.175286</pose>
+        <scale>1 1 1</scale>
+        <link name='Gripper1'>
+          <pose>1.06889 -0.296468 0.634333 0.002787 1.55357 0.178114</pose>
+          <velocity>-0.001298 0.001495 -0.001127 0.013239 -0.015444 -0.003628</velocity>
+          <acceleration>0.176366 -0.522428 -1.32314 -0.800015 0.115694 1.15284</acceleration>
+          <wrench>0.001411 -0.004179 -0.010585 0 -0 0</wrench>
+        </link>
+        <link name='Gripper2'>
+          <pose>1.06889 -0.296466 0.634332 0.00101 -1.55357 -2.96728</pose>
+          <velocity>-0.001105 0.001115 -0.001011 0.019053 -0.018645 -0.008285</velocity>
+          <acceleration>2.37437 -0.653076 -0.685483 -2.4048 0.187143 0.316276</acceleration>
+          <wrench>0.018995 -0.005225 -0.005484 0 -0 0</wrench>
+        </link>
+        <link name='base_link'>
+          <pose>0.57496 -0.304744 -4e-06 -6e-06 9e-06 0.175286</pose>
+          <velocity>-0.002875 -0.001014 -0.004635 -0.003929 0.009598 0.00121</velocity>
+          <acceleration>-1.37889 -0.320915 -10.4658 -1.54983 0.391594 1.13783</acceleration>
+          <wrench>-3.7852 -0.880945 -28.7296 0 -0 0</wrench>
+        </link>
+        <link name='joint_1'>
+          <pose>0.671452 -0.367882 0.158495 1.2e-05 -2.6e-05 -2.9663</pose>
+          <velocity>-0.001639 -0.000481 -0.005265 -0.001753 0.005892 0.005564</velocity>
+          <acceleration>0.316212 0.193419 -10.4642 2.54819 -0.75536 0.167727</acceleration>
+          <wrench>0.826886 0.505785 -27.3635 0 -0 0</wrench>
+        </link>
+        <link name='joint_2'>
+          <pose>0.697934 -0.362174 0.323324 1.57082 -3.8e-05 -2.9663</pose>
+          <velocity>-0.001618 -0.000347 -0.005367 -0.000341 0.002822 0.005095</velocity>
+          <acceleration>0.378697 0.118215 -10.6568 1.98475 -1.1888 -2.22385</acceleration>
+          <wrench>0.91548 0.285779 -25.7622 0 -0 0</wrench>
+        </link>
+        <link name='joint_3'>
+          <pose>0.697945 -0.362166 0.601324 1.78592 2.2e-05 1.74609</pose>
+          <velocity>-0.001157 -0.000358 -0.005377 0.000471 0.000385 0.005033</velocity>
+          <acceleration>0.586865 0.029227 -10.6705 1.02004 0.697253 0.421454</acceleration>
+          <wrench>0.902617 0.044952 -16.4116 0 -0 0</wrench>
+        </link>
+        <link name='joint_4'>
+          <pose>0.759242 -0.351309 0.633319 -1.57087 -1.2e-05 -1.39551</pose>
+          <velocity>-0.001222 -9.2e-05 -0.00476 0.009838 -0.007701 0.004805</velocity>
+          <acceleration>0.543233 0.022049 -7.31855 -0.619444 1.1973 -0.000146</acceleration>
+          <wrench>0.89872 0.036478 -12.1077 0 -0 0</wrench>
+        </link>
+        <link name='joint_5'>
+          <pose>1.00984 -0.306926 0.633298 -1.56994 -1.55354 -2.96717</pose>
+          <velocity>-0.001447 0.00111 -0.002112 0.009805 -0.00819 0.004834</velocity>
+          <acceleration>0.507933 0.041295 -3.89672 -1.81874 1.20433 3.09288</acceleration>
+          <wrench>0.192274 0.015632 -1.47507 0 -0 0</wrench>
+        </link>
+        <link name='joint_6'>
+          <pose>1.0584 -0.298327 0.634148 0.000931 -1.55354 -2.96723</pose>
+          <velocity>-0.001508 0.001322 -0.001141 0.00816 -0.006596 0.004941</velocity>
+          <acceleration>0.461828 0.027599 -1.88526 0.621996 -0.460997 -2.64593</acceleration>
+          <wrench>0.028815 0.001722 -0.117628 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='unit_box'>
+        <pose>0.447385 -2.45045 0.5 1.5708 -0 0.296867</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>0.447385 -2.45045 0.5 1.5708 -0 0.296867</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>8.228 2.4177 8.58046 -1.71128 -0.747444 -3.13157</acceleration>
+          <wrench>8.228 2.4177 8.58046 0 -0 0</wrench>
+        </link>
+      </model>
+      <light name='sun'>
+        <pose>0 0 10 0 -0 0</pose>
+      </light>
+    </state>
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>0.848831 -0.26191 1.04407 0 0.451643 -2.44299</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+    <model name='scara_robot_v2'>
+      <link name='base_link'>
+        <inertial>
+          <pose>-0 -0.163771 0 0 -0 0</pose>
+          <mass>46.1323</mass>
+          <inertia>
+            <ixx>0.490072</ixx>
+            <ixy>2.20663e-17</ixy>
+            <ixz>2.19476e-18</ixz>
+            <iyy>0.131264</iyy>
+            <iyz>1.39915e-17</iyz>
+            <izz>0.490072</izz>
+          </inertia>
+        </inertial>
+        <collision name='base_link_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/scara_mit_dh_urdf/meshes/base_link.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='base_link_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/scara_mit_dh_urdf/meshes/base_link.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm1' type='revolute'>
+        <pose relative_to='base_link'>0 -0.33 0 -1.57079 -1.57079 -3.14159</pose>
+        <parent>base_link</parent>
+        <child>joint_1</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_1'>
+        <pose relative_to='arm1'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0 0 0.023874 0 -0 0</pose>
+          <mass>4.37416</mass>
+          <inertia>
+            <ixx>0.0173959</ixx>
+            <ixy>0</ixy>
+            <ixz>-2.70662e-19</ixz>
+            <iyy>0.0173959</iyy>
+            <iyz>-8.65983e-35</iyz>
+            <izz>0.033352</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_1_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/scara_mit_dh_urdf/meshes/joint_1.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_1_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/scara_mit_dh_urdf/meshes/joint_1.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm2' type='revolute'>
+        <pose relative_to='joint_1'>0 0 0.045 0 0 -1.5708</pose>
+        <parent>joint_1</parent>
+        <child>joint_2</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_2'>
+        <pose relative_to='arm2'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0.120818 1e-06 0.051377 0 -0 0</pose>
+          <mass>49.5927</mass>
+          <inertia>
+            <ixx>0.222901</ixx>
+            <ixy>-3.81944e-18</ixy>
+            <ixz>0.0739678</ixz>
+            <iyy>0.736886</iyy>
+            <iyz>4.27095e-18</iyz>
+            <izz>0.865092</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_2_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/scara_mit_dh_urdf/meshes/joint_2.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_2_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/scara_mit_dh_urdf/meshes/joint_2.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm3' type='revolute'>
+        <pose relative_to='joint_2'>0.325 0 0.06 -3.14159 -0 -3.14159</pose>
+        <parent>joint_2</parent>
+        <child>joint_3</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_3'>
+        <pose relative_to='arm3'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0.112812 0 -0.084883 0 -0 0</pose>
+          <mass>32.5847</mass>
+          <inertia>
+            <ixx>0.164463</ixx>
+            <ixy>-2.66722e-07</ixy>
+            <ixz>0.00501596</ixz>
+            <iyy>0.377277</iyy>
+            <iyz>1.55741e-07</iyz>
+            <izz>0.328744</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_3_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/scara_mit_dh_urdf/meshes/joint_3.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_3_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/scara_mit_dh_urdf/meshes/joint_3.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm4' type='prismatic'>
+        <pose relative_to='joint_3'>-0.225 0 0.06926 0 -0 0</pose>
+        <parent>joint_3</parent>
+        <child>joint_4</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_4'>
+        <pose relative_to='arm4'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0 0 -0.185 0 -0 0</pose>
+          <mass>0.460306</mass>
+          <inertia>
+            <ixx>0.00526283</ixx>
+            <ixy>-4.60149e-34</ixy>
+            <ixz>-1.79134e-18</ixz>
+            <iyy>0.00526283</iyy>
+            <iyz>-1.33054e-18</iyz>
+            <izz>2.30153e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_4_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/scara_mit_dh_urdf/meshes/joint_4.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_4_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/scara_mit_dh_urdf/meshes/joint_4.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='Saugnapf' type='revolute'>
+        <pose relative_to='joint_4'>0 0 0 0 0 -0.27762</pose>
+        <parent>joint_4</parent>
+        <child>Gripper</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='Gripper'>
+        <pose relative_to='Saugnapf'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0 0 0.011596 0 -0 0</pose>
+          <mass>0.00734708</mass>
+          <inertia>
+            <ixx>1.56955e-06</ixx>
+            <ixy>-7.94093e-23</ixy>
+            <ixz>1.42239e-22</ixz>
+            <iyy>1.56955e-06</iyy>
+            <iyz>5.18325e-23</iyz>
+            <izz>2.46567e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='Gripper_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/scara_mit_dh_urdf/meshes/Gripper.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Gripper_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/scara_mit_dh_urdf/meshes/Gripper.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>-1 0 0 0 -0 0</pose>
+    </model>
+    <model name='six_axis_robot_v2'>
+      <link name='base_link'>
+        <inertial>
+          <pose>0.079875 -0.079 0.073672 0 -0 0</pose>
+          <mass>2.7451</mass>
+          <inertia>
+            <ixx>0.00962158</ixx>
+            <ixy>-3.60983e-19</ixy>
+            <ixz>0.000162466</ixz>
+            <iyy>0.00976445</iyy>
+            <iyz>6.34864e-19</iyz>
+            <izz>0.00791026</izz>
+          </inertia>
+        </inertial>
+        <collision name='base_link_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/base_link.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='base_link_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/base_link.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm_1' type='revolute'>
+        <pose relative_to='base_link'>0.084 -0.079 0.1585 0 0 -3.14159</pose>
+        <parent>base_link</parent>
+        <child>joint_1</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_1'>
+        <pose relative_to='arm_1'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0.001296 0.001353 0.065878 0 -0 0</pose>
+          <mass>2.61497</mass>
+          <inertia>
+            <ixx>0.0125509</ixx>
+            <ixy>9.11703e-05</ixy>
+            <ixz>0.00102826</ixz>
+            <iyy>0.0113026</iyy>
+            <iyz>-0.000350125</iyz>
+            <izz>0.00997314</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_1_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/joint_1.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_1_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/joint_1.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm_2' type='revolute'>
+        <pose relative_to='joint_1'>-0.027064 -0.001 0.16483 1.5708 -0 0</pose>
+        <parent>joint_1</parent>
+        <child>joint_2</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_2'>
+        <pose relative_to='arm_2'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0 0.129202 -0.000178 0 -0 0</pose>
+          <mass>2.41745</mass>
+          <inertia>
+            <ixx>0.0124923</ixx>
+            <ixy>2.99448e-10</ixy>
+            <ixz>-1.55104e-09</ixz>
+            <iyy>0.00626764</iyy>
+            <iyz>0.00040958</iyz>
+            <izz>0.00827354</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_2_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/joint_2.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_2_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/joint_2.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm_3' type='revolute'>
+        <pose relative_to='joint_2'>0 0.278 0 3.14159 -1.57079 -2.92651</pose>
+        <parent>joint_2</parent>
+        <child>joint_3</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_3'>
+        <pose relative_to='arm_3'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0.002387 0.01772 -0.007832 0 -0 0</pose>
+          <mass>1.53803</mass>
+          <inertia>
+            <ixx>0.00395288</ixx>
+            <ixy>1.48351e-05</ixy>
+            <ixz>-1.77849e-05</ixz>
+            <iyy>0.0035114</iyy>
+            <iyz>-0.00034487</iyz>
+            <izz>0.00297829</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_3_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/joint_3.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_3_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/joint_3.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm_4' type='revolute'>
+        <pose relative_to='joint_3'>0 0.044548 0.053986 0.21508 -0 -3.14159</pose>
+        <parent>joint_3</parent>
+        <child>joint_4</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_4'>
+        <pose relative_to='arm_4'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0.000288 -0 0.115107 0 -0 0</pose>
+          <mass>1.65439</mass>
+          <inertia>
+            <ixx>0.00939546</ixx>
+            <ixy>1.53549e-09</ixy>
+            <ixz>-6.63031e-05</ixz>
+            <iyy>0.00988811</iyy>
+            <iyz>-2.80874e-10</iyz>
+            <izz>0.00237982</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_4_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/joint_4.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_4_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/joint_4.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm_5' type='revolute'>
+        <pose relative_to='joint_4'>0 0 0.2545 -1.5708 0.017333 -1.5708</pose>
+        <parent>joint_4</parent>
+        <child>joint_5</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_5'>
+        <pose relative_to='arm_5'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0 -0.014598 -0.001257 0 -0 0</pose>
+          <mass>0.378542</mass>
+          <inertia>
+            <ixx>0.000418706</ixx>
+            <ixy>-1.44552e-10</ixy>
+            <ixz>3.14606e-10</ixz>
+            <iyy>0.000256662</iyy>
+            <iyz>6.94363e-06</iyz>
+            <izz>0.000438888</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_5_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/joint_5.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_5_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/joint_5.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='arm_6' type='revolute'>
+        <pose relative_to='joint_5'>0 -0.049316 0 1.5708 -0 0</pose>
+        <parent>joint_5</parent>
+        <child>joint_6</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='joint_6'>
+        <pose relative_to='arm_6'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0 -0 0.023857 0 -0 0</pose>
+          <mass>0.0623937</mass>
+          <inertia>
+            <ixx>2.09776e-05</ixx>
+            <ixy>1.75e-07</ixy>
+            <ixz>-1.18055e-20</ixz>
+            <iyy>2.21246e-05</iyy>
+            <iyz>-2.58494e-21</iyz>
+            <izz>2.84483e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='joint_6_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/joint_6.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='joint_6_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/joint_6.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='Zange1' type='prismatic'>
+        <pose relative_to='joint_6'>0 0 0.010664 0 0 -3.14159</pose>
+        <parent>joint_6</parent>
+        <child>Gripper1</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='Gripper1'>
+        <pose relative_to='Zange1'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0.02125 -0.00575 0.02802 0 -0 0</pose>
+          <mass>0.008</mass>
+          <inertia>
+            <ixx>1.57083e-06</ixx>
+            <ixy>8.75e-08</ixy>
+            <ixz>7.75e-07</ixz>
+            <iyy>2.17083e-06</iyy>
+            <iyz>-1.75e-07</iyz>
+            <izz>9.08333e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='Gripper1_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/Gripper1.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Gripper1_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/Gripper1.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='Zang2' type='prismatic'>
+        <pose relative_to='Gripper1'>0 0 0 0 0 -3.14159</pose>
+        <parent>Gripper1</parent>
+        <child>Gripper2</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='Gripper2'>
+        <pose relative_to='Zang2'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>-0.02125 -0.00575 0.02802 0 -0 0</pose>
+          <mass>0.008</mass>
+          <inertia>
+            <ixx>1.57083e-06</ixx>
+            <ixy>8.75e-08</ixy>
+            <ixz>7.75e-07</ixz>
+            <iyy>2.17083e-06</iyy>
+            <iyz>-1.75e-07</iyz>
+            <izz>9.08333e-07</izz>
+          </inertia>
+        </inertial>
+        <collision name='Gripper2_collision'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/Gripper2.STL</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Gripper2_visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>/home/leoniebolt/catkin_ws/src/rod/six_axis_robot_urdf/meshes/Gripper2.STL</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose>1 0 0 0 -0 0</pose>
+    </model>
+  </world>
+</sdf>
