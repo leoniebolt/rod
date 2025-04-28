@@ -1,1 +1,0 @@
-SCARA Moveit pkg

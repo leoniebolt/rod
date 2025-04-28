@@ -1,33 +1,27 @@
 scara_controller:
   type: position_controllers/JointTrajectoryController
   joints:
-    - arm1
-    - arm2
-    - arm3
-    - arm4
-    - Saugnapf
+    - j1
+    - j2
+    - j3
+    - j4
   gains:
-    arm1:
+    j1:
       p: 100
       d: 1
       i: 1
       i_clamp: 1
-    arm2:
+    j2:
       p: 100
       d: 1
       i: 1
       i_clamp: 1
-    arm3:
+    j3:
       p: 100
       d: 1
       i: 1
       i_clamp: 1
-    arm4:
-      p: 100
-      d: 1
-      i: 1
-      i_clamp: 1
-    Saugnapf:
+    j4:
       p: 100
       d: 1
       i: 1

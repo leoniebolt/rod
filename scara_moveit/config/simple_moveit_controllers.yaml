@@ -4,8 +4,7 @@ controller_list:
     type: FollowJointTrajectory
     default: True
     joints:
-      - arm1
-      - arm2
-      - arm3
-      - arm4
-      - Saugnapf
+      - j1
+      - j2
+      - j3
+      - j4

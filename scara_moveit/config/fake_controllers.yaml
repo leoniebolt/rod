@@ -1,12 +1,11 @@
 controller_list:
-  - name: fake_scara_controller
+  - name: fake_scara_planninggroup_controller
     type: $(arg fake_execution_type)
     joints:
-      - arm1
-      - arm2
-      - arm3
-      - arm4
-      - Saugnapf
+      - j1
+      - j2
+      - j3
+      - j4
 initial:  # Define initial robot poses per group
-  - group: scara
-    pose: pHome_scara
+  - group: scara_planninggroup
+    pose: home_pose

@@ -1,24 +1,22 @@
 <launch>
-  <!-- Gazebo starten mit eigener Welt -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(env HOME)/catkin_ws/src/rod/worlds/rod_empty.world"/>
   </include>
 
-  <!-- SCARA-Roboter -->
   <group ns="scara">
     <param name="tf_prefix" value="scara_" />
+    
+    <param name="robot_description" textfile="$(find scara_mit_dh_urdf)/urdf/scara_mit_dh_urdf.urdf" />
+
     <node name="spawn_scara" pkg="gazebo_ros" type="spawn_model"
           args="-urdf -model scara -param robot_description -x 0 -y 0 -z 0.1"
           output="screen" />
 
-    <param name="robot_description" value="$(find scara_mit_dh_urdf)/urdf/scara_mit_dh_urdf.urdf" />
-    
-<include file="$(find scara_moveit)/launch/move_group.launch">
-  <!--<arg name="robot_description" value="$(find scara_mit_dh_urdf)/urdf/scara_mit_dh_urdf.urdf" /> -->
-</include>
+    <include file="$(find scara_moveit)/launch/move_group.launch" />
   </group>
 
-  <!-- SIX-Roboter -->
+
+  <!-- SIX-Roboter 
   <group ns="sixAxis">
     <param name="tf_prefix" value="six_" />
     <node name="spawn_six" pkg="gazebo_ros" type="spawn_model"
@@ -28,8 +26,8 @@
     <param name="robot_description" command="$(find six_axis_robot_urdf1)/urdf/six_axis_robot_urdf1.urdf"/>
     
 <include file="$(find sixaxis_moveit)/launch/move_group.launch">
-  <!--<arg name="robot_description" value="$(find six_axis_robot_urdf1)/urdf/six_axis_robot_urdf1.urdf" />-->
+  <arg name="robot_description" value="$(find six_axis_robot_urdf1)/urdf/six_axis_robot_urdf1.urdf" />
 </include>
   </group>
-
+-->
 </launch>
