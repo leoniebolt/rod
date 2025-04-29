@@ -1,0 +1,12 @@
+<launch>
+    <param name="scara_mit_dh_urdf_description" textfile="$(find scara_mit_dh_urdf)/urdf/scara_mit_dh_urdf.urdf"/>
+    <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param scara_mit_dh_urdf_description -urdf -model scara"/>
+
+
+    <rosparam file="$(find scara_moveit)/config/ros_controllers.yaml" command="load"/>    
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="scara_controller "/>
+    <node name="scara_state_publisher" pkg="scara_state_publisher" type="scara_state_publisher"/>
+   
+
+</launch>
