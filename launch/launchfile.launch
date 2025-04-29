@@ -1,33 +1,10 @@
 <launch>
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(env HOME)/catkin_ws/src/rod/worlds/rod_empty.world"/>
-  </include>
+    <param name="scara_mit_dh_urdf_description" textfile="$(find scara_mit_dh_urdf)/urdf/scara_mit_dh_urdf.urdf"/>
+    <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param scara_mit_dh_urdf_description -urdf -model scara_mit_dh_urdf"/>
 
-  <group ns="scara">
-    <param name="tf_prefix" value="scara_" />
-    
-    <param name="robot_description" textfile="$(find scara_mit_dh_urdf)/urdf/scara_mit_dh_urdf.urdf" />
+    <rosparam file="$(find scara_moveit)/config/ros_controllers.yaml" command="load"/>    
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="scara_controller "/>
+    <node name="scara_state_publisher" pkg="scara_state_publisher" type="scara_state_publisher"/>
 
-    <node name="spawn_scara" pkg="gazebo_ros" type="spawn_model"
-          args="-urdf -model scara -param robot_description -x 0 -y 0 -z 0.1"
-          output="screen" />
-
-    <include file="$(find scara_moveit)/launch/move_group.launch" />
-  </group>
-
-
-  <!-- SIX-Roboter 
-  <group ns="sixAxis">
-    <param name="tf_prefix" value="six_" />
-    <node name="spawn_six" pkg="gazebo_ros" type="spawn_model"
-          args="-urdf -model sixAxis -param robot_description -x 1 -y 0 -z 0.1"
-          output="screen" />
-
-    <param name="robot_description" command="$(find six_axis_robot_urdf1)/urdf/six_axis_robot_urdf1.urdf"/>
-    
-<include file="$(find sixaxis_moveit)/launch/move_group.launch">
-  <arg name="robot_description" value="$(find six_axis_robot_urdf1)/urdf/six_axis_robot_urdf1.urdf" />
-</include>
-  </group>
--->
 </launch>
