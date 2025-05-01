@@ -4,29 +4,31 @@
         <arg name="world_name" value="$(env HOME)/catkin_ws/src/rod/worlds/rod_empty.world"/>
     </include>
 
-<!--spawn six axis robot-->
+<!--spawn six axis robot
     <node
         name="spawn_six_axis"
         pkg="gazebo_ros"
         type="spawn_model"
         args="-file $(env HOME)/catkin_ws/src/rod/six_axis_robot_urdf1/urdf/six_axis_robot_urdf1.urdf -urdf -model six_axis_robot1"
         output="screen" />
-
+        -->
+<param name="robot_description" textfile="$(find scara_mit_dh_urdf)/urdf/scara_mit_dh_urdf.urdf"/>
 <!--spawn SCARA robot-->
     <node
         name="spawn_scara"
-        pkg="gazebo_ros"
+        pkg="gazebo_ros"-
         type="spawn_model"
-        args="-file $(env HOME)/catkin_ws/src/rod/scara_mit_dh_urdf/urdf/scara_mit_dh_urdf.urdf -urdf -model scara_robot_v2"
+        args="-param robot_description -urdf -model scara"
         output="screen" />
 
-<!--six axis robot-->
+<!--six axis robot
     <node
         name="fake_joint_calibration_six"
         pkg="rostopic"
         type="rostopic"
         args="pub /calibrated std_msgs/Bool true"
         output="screen" />
+        -->
 
 <!--SCARA robot joint calibration-->
     <node
@@ -35,6 +37,8 @@
         type="rostopic"
         args="pub /calibrated std_msgs/Bool true"
         output="screen" />
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
     <rosparam file="$(find scara_moveit)/config/ros_controllers.yaml" command="load"/>    
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="scara_controller "/>
