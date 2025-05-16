@@ -1,0 +1,69 @@
+sixaxis_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - saj1
+    - saj2
+    - saj3
+    - saj4
+    - saj5
+    - saj6
+  gains:
+    saj1:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    saj2:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    saj3:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    saj4:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    saj5:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    saj6:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+
+scara_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - sj1
+    - sj2
+    - sj3
+    - sjEE
+  gains:
+    sj1:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    sj2:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    sj3:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    sjEE:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
