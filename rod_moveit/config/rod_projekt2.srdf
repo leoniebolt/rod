@@ -44,7 +44,7 @@
         <joint name="saj2" value="0"/>
         <joint name="saj3" value="0"/>
         <joint name="saj4" value="0"/>
-        <joint name="saj5" value="-0.012"/>
+        <joint name="saj5" value="0"/>
         <joint name="saj6" value="0"/>
     </group_state>
     <group_state name="home_scara" group="scara">
