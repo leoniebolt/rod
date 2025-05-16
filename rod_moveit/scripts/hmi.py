@@ -21,7 +21,7 @@ class RobotHMI(QWidget):
 
         # Robot selection dropdown
         self.robot_selector = QComboBox()
-        self.robot_selector.addItems(['scara', 'ur'])
+        self.robot_selector.addItems(['scara', 'ur5'])
         self.robot_selector.currentTextChanged.connect(self.change_robot)
 
         layout.addWidget(QLabel("Roboter auswählen:"))
