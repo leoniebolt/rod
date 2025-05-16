@@ -1,1 +1,0 @@
-SCARA robot URDF pkg
