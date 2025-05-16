@@ -1,93 +1,47 @@
-#!/usr/bin/env python3
-import copy
+#!/usr/bin/env python
+
 import rospy
-import roslaunch
-import moveit_commander
-import moveit_msgs.msg
-import geometry_msgs.msg
-import numpy as np
-import sys
-import math
-import time 
+import actionlib
+from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryGoal
+from trajectory_msgs.msg import JointTrajectoryPoint
 
-class sixaxis_robot:
-    def __init__(self,nodename="sixaxis_robot",groupname="sixaxis"):
-        rospy.init_node(nodename, anonymous=False)
-        moveit_commander.roscpp_initialize(sys.argv)
-        self.robot = moveit_commander.RobotCommander()
-        self.move_group = moveit_commander.MoveGroupCommander(groupname)
-        
-        #Acceleration and Speed factors
-        self.move_group.set_max_acceleration_scaling_factor(1)
-        self.move_group.set_max_velocity_scaling_factor(1)
-        
-        self.move_group.set_goal_tolerance(0.001) #For real robot set the tolerance to 1 mm
-        self.goals = []
+def send_trajectory(controller_name, joint_names, positions_list, duration=2.0):
+    client = actionlib.SimpleActionClient(f'/{controller_name}/follow_joint_trajectory', FollowJointTrajectoryAction)
+    client.wait_for_server()
 
-    def getPoseAndPrint(self):
-        self.cp = self.move_group.get_current_pose().pose
-        print("Info: current pose ")
-        print("x: ",self.cp.position.x)
-        print("y: ",self.cp.position.y)
-        print("z: ",self.cp.position.z)
-        print("qx: ",self.cp.orientation.x)
-        print("qy: ",self.cp.orientation.y)
-        print("qz: ",self.cp.orientation.z)
-        print("qw: ",self.cp.orientation.w)
+    goal = FollowJointTrajectoryGoal()
+    goal.trajectory.joint_names = joint_names
 
-    def setTarget(self,x,y,z,roll,pitch,yaw):
-        goal = geometry_msgs.msg.Pose()
+    for positions in positions_list:
+        point = JointTrajectoryPoint()
+        point.positions = positions
+        point.time_from_start = rospy.Duration(duration)
+        goal.trajectory.points.append(point)
 
-        qx = np.sin(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) - np.cos(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
-        qy = np.cos(roll/2) * np.sin(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.cos(pitch/2) * np.sin(yaw/2)
-        qz = np.cos(roll/2) * np.cos(pitch/2) * np.sin(yaw/2) - np.sin(roll/2) * np.sin(pitch/2) * np.cos(yaw/2)
-        qw = np.cos(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
+    client.send_goal(goal)
+    client.wait_for_result()
 
-        goal.position.x = x
-        goal.position.y = y
-        goal.position.z = z
-        goal.orientation.x = qx
-        goal.orientation.y = qy
-        goal.orientation.z = qz
-        goal.orientation.w = qw
+if __name__ == '__main__':
+    rospy.init_node('dual_robot_trajectory')
 
-        try:
-            self.goals.append(copy.deepcopy(goal))
-    
-        except:
-            print("Target not set")
+    # Definieren Sie die Gelenknamen entsprechend Ihrer URDF
+    sixaxis_joints = ['saj1', 'saj2', 'saj3', 'saj4', 'saj5', 'saj6']
+    scara_joints = ['sj1', 'sj2', 'sj3', 'sjEE']
 
-    def move(self):
+    # Beispielhafte Positionen für beide Roboter
+    sixaxis_positions = [
+        [0.0, -0.5, 0.5, 0.0, 0.5, 0.0],
+        [0.2, -0.3, 0.6, 0.1, 0.4, 0.1]
+    ]
 
-        self.move_group.clear_pose_targets()
-        try:
-            for g in self.goals:
-                                
-                print('##############################################################################################')
-                print(g)
-                print('##############################################################################################')
-                
-                self.move_group.set_pose_target(g)
-                self.move_group.go(wait=True)
-        except:
-            print("Targets not reachable")
-        finally:
-            print("Stopping")
-            self.move_group.stop()
-            self.move_group.clear_pose_targets()
-            self.goals = []
+    scara_positions = [
+        [0.0, 0.5, 0.0, 0.0],
+        [0.1, 0.4, 0.1, 0.1]
+    ]
 
-if __name__ == "__main__":
-    r = sixaxis_robot(nodename="demo_robot",groupname="sixaxis")
-    
-    r.setTarget(0.25,0,0.30,    3.14,0,0)
-    r.setTarget(0.25,0.2,0.30,  3.14,0,0)
-    r.setTarget(0.25,0.2,0.1,   3.14,0,0)
-    r.setTarget(0.25,0.2,0.30,  3.14,0,0)
-    r.setTarget(0.25,-0.2,0.30, 3.14,0,0)
-    r.setTarget(0.25,-0.2,0.1,  3.14,0,0)
-    r.setTarget(0.25,-0.2,0.30, 3.14,0,0)
-    r.setTarget(0.25,0,0.30,    3.14,0,0)
-    r.move()
-    
-    del r
+    rate = rospy.Rate(0.5)  # 0.5 Hz, also alle 2 Sekunden
+
+    while not rospy.is_shutdown():
+        send_trajectory('sixaxis_controller', sixaxis_joints, sixaxis_positions)
+        send_trajectory('scara_controller', scara_joints, scara_positions)
+        rate.sleep()
