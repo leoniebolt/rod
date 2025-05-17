@@ -15,37 +15,37 @@ joint_limits:
     max_acceleration: 0
   saj2:
     has_velocity_limits: true
-    max_velocity: 6.6
+    max_velocity: 6
     has_acceleration_limits: false
     max_acceleration: 0
   saj3:
     has_velocity_limits: true
-    max_velocity: 4.9
+    max_velocity: 5
     has_acceleration_limits: false
     max_acceleration: 0
   saj4:
     has_velocity_limits: true
-    max_velocity: 9.800000000000001
+    max_velocity: 10
     has_acceleration_limits: false
     max_acceleration: 0
   saj5:
     has_velocity_limits: true
-    max_velocity: 7.3
+    max_velocity: 7
     has_acceleration_limits: false
     max_acceleration: 0
   saj6:
     has_velocity_limits: true
-    max_velocity: 13.1
+    max_velocity: 13
     has_acceleration_limits: false
     max_acceleration: 0
   sj1:
     has_velocity_limits: true
-    max_velocity: 9.199999999999999
+    max_velocity: 10
     has_acceleration_limits: false
     max_acceleration: 0
   sj2:
     has_velocity_limits: true
-    max_velocity: 9.199999999999999
+    max_velocity: 10
     has_acceleration_limits: false
     max_acceleration: 0
   sj3:
@@ -55,6 +55,6 @@ joint_limits:
     max_acceleration: 0
   sjEE:
     has_velocity_limits: true
-    max_velocity: 41.9
+    max_velocity: 42
     has_acceleration_limits: false
     max_acceleration: 0
