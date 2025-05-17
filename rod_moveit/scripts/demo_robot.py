@@ -1,47 +1,79 @@
 #!/usr/bin/env python
 
+import sys
+import moveit_commander
+import geometry_msgs.msg
+import time
 import rospy
-import actionlib
-from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryGoal
-from trajectory_msgs.msg import JointTrajectoryPoint
 
-def send_trajectory(controller_name, joint_names, positions_list, duration=2.0):
-    client = actionlib.SimpleActionClient(f'/{controller_name}/follow_joint_trajectory', FollowJointTrajectoryAction)
-    client.wait_for_server()
+# Initialize ros node
+rospy.init_node("moveit_demo", anonymous=True)
 
-    goal = FollowJointTrajectoryGoal()
-    goal.trajectory.joint_names = joint_names
+# Initialisierung
+moveit_commander.roscpp_initialize(sys.argv)
+robot = moveit_commander.RobotCommander()
+scene = moveit_commander.PlanningSceneInterface()
+group = moveit_commander.MoveGroupCommander("sixaxis")
 
-    for positions in positions_list:
-        point = JointTrajectoryPoint()
-        point.positions = positions
-        point.time_from_start = rospy.Duration(duration)
-        goal.trajectory.points.append(point)
 
-    client.send_goal(goal)
-    client.wait_for_result()
+# Zielposen definieren
+poses = {
+    "pre_post_pick_up_pose": geometry_msgs.msg.Pose(
+        position=geometry_msgs.msg.Point(x=-1.0, y=-1.0, z=1.5),
+        orientation=geometry_msgs.msg.Quaternion(w=-1.0)
+        ),
+    "pick_up_pose": geometry_msgs.msg.Pose(
+        position=geometry_msgs.msg.Point(x=-1.0, y=-1.0, z=1.0),
+        orientation=geometry_msgs.msg.Quaternion(w=-1.0)
+    ),
+    "pre_post_place_pose": geometry_msgs.msg.Pose(
+        position=geometry_msgs.msg.Point(x=-2.5, y=-1.0, z=1.0),
+        orientation=geometry_msgs.msg.Quaternion(w=-1.0)
+    ),
+    "place_pose": geometry_msgs.msg.Pose(
+        position=geometry_msgs.msg.Point(x=-2.5, y=-1.0, z=0.2),
+        orientation=geometry_msgs.msg.Quaternion(w=-1.0)
+    )
+}
 
-if __name__ == '__main__':
-    rospy.init_node('dual_robot_trajectory')
 
-    # Definieren Sie die Gelenknamen entsprechend Ihrer URDF
-    sixaxis_joints = ['saj1', 'saj2', 'saj3', 'saj4', 'saj5', 'saj6']
-    scara_joints = ['sj1', 'sj2', 'sj3', 'sjEE']
 
-    # Beispielhafte Positionen für beide Roboter
-    sixaxis_positions = [
-        [0.0, -0.5, 0.5, 0.0, 0.5, 0.0],
-        [0.2, -0.3, 0.6, 0.1, 0.4, 0.1]
-    ]
+""" 
+pose_target = geometry_msgs.msg.Pose()
+pose_target.orientation.w = 1.0
+pose_target.position.x = -1.0
+pose_target.position.y = -1.0
+pose_target.position.z = 1.5
+group.set_pose_target(pose_target)
 
-    scara_positions = [
-        [0.0, 0.5, 0.0, 0.0],
-        [0.1, 0.4, 0.1, 0.1]
-    ]
+# Planung und Ausführung
+plan = group.go(wait=True)
+group.stop()
+group.clear_pose_targets() 
+"""
 
-    rate = rospy.Rate(0.5)  # 0.5 Hz, also alle 2 Sekunden
 
-    while not rospy.is_shutdown():
-        send_trajectory('sixaxis_controller', sixaxis_joints, sixaxis_positions)
-        send_trajectory('scara_controller', scara_joints, scara_positions)
-        rate.sleep()
+
+print("Planning frame:", group.get_planning_frame())
+print("Aktuelle Pose:", group.get_current_pose().pose)
+
+
+
+for name in ["pre_post_pick_up_pose", "pick_up_pose", "pre_post_place_pose", "place_pose"]:
+    print(f"\n🟡 Bewege zu: {name}")
+    group.set_pose_target(poses[name])
+    plan = group.plan()
+    print(f"Plan success: {plan[0]}")
+    success = group.execute(plan[1], wait=True)
+
+    #success = group.go(wait=True)
+    group.stop()
+    group.clear_pose_targets()
+
+    if not success:
+        print(f"⚠️ Bewegung zu {name} fehlgeschlagen.")
+    else:
+        print(f"✅ Erfolgreich bewegt zu {name}")
+        print("→ Aktuelle Pose:", group.get_current_pose().pose)
+
+    time.sleep(1)
