@@ -5,6 +5,7 @@ import moveit_commander
 import geometry_msgs.msg
 import time
 import rospy
+import threading
 
 # ROS Node initialisieren
 rospy.init_node("moveit_demo", anonymous=True)
@@ -19,7 +20,7 @@ s_group = moveit_commander.MoveGroupCommander("scara")
 # SCARA Zielposen
 s_poses = {
     "s_pre_post_pick_up_pose": geometry_msgs.msg.Pose(
-        position=geometry_msgs.msg.Point(x=-1.2, y=-0.2, z=1.5),
+        position=geometry_msgs.msg.Point(x=0.2, y=-0.2, z=0.1),
         orientation=geometry_msgs.msg.Quaternion(x=0.0, y=0.0, z=0.0, w=1.0)
     ),
     "s_pick_up_pose": geometry_msgs.msg.Pose(
@@ -40,21 +41,22 @@ s_poses = {
 sa_poses = {
     "sa_pre_post_pick_up_pose": geometry_msgs.msg.Pose(
         position=geometry_msgs.msg.Point(x=-1.0, y=-1.0, z=1.5),
-        orientation=geometry_msgs.msg.Quaternion(x=0.0, y=0.0, z=1.0, w=0.0)
+        orientation=geometry_msgs.msg.Quaternion(x=0.0, y=1.0, z=0.0, w=0.0)
     ),
     "sa_pick_up_pose": geometry_msgs.msg.Pose(
         position=geometry_msgs.msg.Point(x=-1.0, y=-1.0, z=1.0),
-        orientation=geometry_msgs.msg.Quaternion(x=0.0, y=0.0, z=1.0, w=0.0)
+        orientation=geometry_msgs.msg.Quaternion(x=0.0, y=1.0, z=0.0, w=0.0)
     ),
     "sa_pre_post_place_pose": geometry_msgs.msg.Pose(
         position=geometry_msgs.msg.Point(x=-2.5, y=-1.0, z=1.0),
-        orientation=geometry_msgs.msg.Quaternion(x=0.0, y=0.0, z=1.0, w=0.0)
+        orientation=geometry_msgs.msg.Quaternion(x=0.0, y=1.0, z=0.0, w=0.0)
     ),
     "sa_place_pose": geometry_msgs.msg.Pose(
         position=geometry_msgs.msg.Point(x=-2.5, y=-1.0, z=0.2),
-        orientation=geometry_msgs.msg.Quaternion(x=0.0, y=0.0, z=1.0, w=0.0)
+        orientation=geometry_msgs.msg.Quaternion(x=0.0, y=1.0, z=0.0, w=0.0)
     )
 }
+
 
 # Funktion zum Bewegen eines MoveGroups zu einer Pose
 def move_to_pose(group, pose, label):
@@ -77,15 +79,46 @@ def move_to_pose(group, pose, label):
 
     time.sleep(1)
 
+
+"""""
 # 1. SCARA fährt alle 4 Positionen einmal an
 print("\n🚦 Starte SCARA Sequenz...")
 for name, pose in s_poses.items():
     print(f"\n🟡 Scara → {name}")
     move_to_pose(s_group, pose, name)
 
-# 2. Danach fährt SixAxis in einer Endlosschleife alle Positionen ab
-print("\n🔁 Starte SixAxis Loop...")
+
+# 1. SCARA einmal fahren
+for name, pose in s_poses.items():
+    move_to_pose(s_group, pose, name)
+
+# 2. Danach beide Roboter in Endlosschleife
 while not rospy.is_shutdown():
+    print("SCARA Loop")
+    for name, pose in s_poses.items():
+        move_to_pose(s_group, pose, name)
+
+    print("SixAxis Loop")
     for name, pose in sa_poses.items():
-        print(f"\n🟡 SixAxis → {name}")
         move_to_pose(sa_group, pose, name)
+"""
+
+
+def move_group_loop(group, poses_dict, label):
+    while not rospy.is_shutdown():
+        for name, pose in poses_dict.items():
+            print(f"{label} → {name}")
+            move_to_pose(group, pose, name)
+
+
+# Threads für beide Roboter erstellen
+#scara_thread = threading.Thread(target=move_group_loop, args=(s_group, s_poses, "SCARA"))
+sixaxis_thread = threading.Thread(target=move_group_loop, args=(sa_group, sa_poses, "SixAxis"))
+
+# Threads starten
+#scara_thread.start()
+sixaxis_thread.start()
+
+# Warten bis Threads beendet werden (z. B. durch CTRL+C)
+#scara_thread.join()
+sixaxis_thread.join()
