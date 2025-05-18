@@ -5,67 +5,68 @@ import moveit_commander
 import geometry_msgs.msg
 from tf.transformations import quaternion_from_euler
 
-# Schrittweite für Bewegung (1 cm)
-step_size = 0.01
-
 def move_tcp(direction):
-    current_pose = group.get_current_pose().pose
-    target_pose = geometry_msgs.msg.Pose()
+    # Erzeuge Waypoint basierend auf Richtung
+    pose_target = group.get_current_pose().pose
+    waypoints = []
 
-    # aktuelle Position übernehmen
-    target_pose.position.x = current_pose.position.x
-    target_pose.position.y = current_pose.position.y
-    target_pose.position.z = current_pose.position.z
+    step_size = 0.05  # Schrittweite in Meter (z. B. 5 cm)
 
-    # Orientierung fix setzen (damit IK stabil bleibt)
-    q = quaternion_from_euler(0, 0, 0)  # Roll, Pitch, Yaw in rad
-    target_pose.orientation.x = q[0]
-    target_pose.orientation.y = q[1]
-    target_pose.orientation.z = q[2]
-    target_pose.orientation.w = q[3]
-
-    # Richtung auswerten
     if direction == "up":
-        target_pose.position.z += step_size
+        pose_target.position.z += step_size
     elif direction == "down":
-        target_pose.position.z -= step_size
+        pose_target.position.z -= step_size
     elif direction == "left":
-        target_pose.position.y += step_size
+        pose_target.position.y += step_size
     elif direction == "right":
-        target_pose.position.y -= step_size
+        pose_target.position.y -= step_size
     elif direction == "forward":
-        target_pose.position.x += step_size
+        pose_target.position.x += step_size
     elif direction == "backward":
-        target_pose.position.x -= step_size
-    elif direction == "stop":
-        rospy.loginfo("Bewegung gestoppt.")
+        pose_target.position.x -= step_size
+    else:
+        rospy.logwarn("[UR] Ungültige Richtung: %s", direction)
         return
 
-    # Bewegungsplanung über Cartesian Path
-    waypoints = [target_pose]
-    plan, fraction = group.compute_cartesian_path(
+    # Orientierung beibehalten (optional)
+    q = quaternion_from_euler(0, 0, 0)
+    pose_target.orientation.x = q[0]
+    pose_target.orientation.y = q[1]
+    pose_target.orientation.z = q[2]
+    pose_target.orientation.w = q[3]
+
+    waypoints.append(pose_target)
+
+    (plan, fraction) = group.compute_cartesian_path(
         waypoints,
-        0.01,  # eef_step
-        0.0    # jump_threshold
+        0.01,    # eef_step in Metern
+        True     # avoid_collisions
     )
 
-    # Ausführung nur bei Erfolg
-    if fraction > 0.9:
-        group.execute(plan, wait=True)
-        rospy.loginfo(f"[UR] Bewegung '{direction}' ausgeführt ({fraction*100:.1f}%).")
+    if fraction < 0.99:
+        rospy.logwarn("[UR] IK fehlgeschlagen für '%s'.", direction)
     else:
-        rospy.logwarn(f"[UR] IK fehlgeschlagen für '{direction}', nur {fraction*100:.1f}% geplant.")
+        group.execute(plan, wait=True)
+        rospy.loginfo("[UR] Bewegung in Richtung '%s' ausgeführt.", direction)
 
 def callback(msg):
-    move_tcp(msg.data)
+    if msg.data == "stop":
+        group.stop()
+        rospy.loginfo("Bewegung gestoppt.")
+    else:
+        move_tcp(msg.data)
 
 if __name__ == '__main__':
-    rospy.init_node('control_listener_ur')
     moveit_commander.roscpp_initialize([])
+    rospy.init_node('control_listener_ur', anonymous=True)
+
     robot = moveit_commander.RobotCommander()
     scene = moveit_commander.PlanningSceneInterface()
-    group = moveit_commander.MoveGroupCommander("sixaxis")  # Passe ggf. deinen MoveGroup-Namen an
+    group_name = "sixaxis"  # muss zu deinem MoveIt setup passen
+    group = moveit_commander.MoveGroupCommander(group_name)
 
-    rospy.Subscriber('/ur_control_topic', String, callback)
+    rospy.loginfo("Ready to take commands for planning group %s.", group_name)
+    rospy.Subscriber("/robot_control_topic", String, callback)
+
     rospy.loginfo("UR Listener bereit.")
     rospy.spin()
