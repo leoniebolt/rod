@@ -10,6 +10,13 @@ def move_tcp(direction):
     current_pose = group.get_current_pose().pose
     target_pose = geometry_msgs.msg.Pose()
     target_pose.orientation = current_pose.orientation  # Orientierung beibehalten
+    
+    # fest Orientierung
+    q = quaternion_from_euler(0, 0, 0)  # Roll, Pitch, Yaw
+    target_pose.orientation.x = q[0]
+    target_pose.orientation.y = q[1]
+    target_pose.orientation.z = q[2]
+    target_pose.orientation.w = q[3]
 
     # Ziel-Position setzen
     target_pose.position = current_pose.position
