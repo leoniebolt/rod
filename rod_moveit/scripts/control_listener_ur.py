@@ -3,6 +3,8 @@ import rospy
 from std_msgs.msg import String
 import moveit_commander
 import geometry_msgs.msg
+from tf.transformations import quaternion_from_euler
+
 
 step_size = 0.01  # 5cm pro Befehl
 
@@ -10,7 +12,7 @@ def move_tcp(direction):
     current_pose = group.get_current_pose().pose
     target_pose = geometry_msgs.msg.Pose()
     target_pose.orientation = current_pose.orientation  # Orientierung beibehalten
-    
+
     # fest Orientierung
     q = quaternion_from_euler(0, 0, 0)  # Roll, Pitch, Yaw
     target_pose.orientation.x = q[0]
