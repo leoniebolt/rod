@@ -4,7 +4,7 @@ from std_msgs.msg import String
 import moveit_commander
 import geometry_msgs.msg
 
-step_size = 0.05  # 5cm pro Befehl
+step_size = 0.01  # 5cm pro Befehl
 
 def move_tcp(direction):
     current_pose = group.get_current_pose().pose
