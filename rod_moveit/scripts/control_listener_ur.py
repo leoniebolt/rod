@@ -38,10 +38,12 @@ def move_tcp(direction):
     waypoints.append(pose_target)
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints,
-        0.01,    # eef_step in Metern
-        True     # avoid_collisions
-    )
+    waypoints,
+    0.01,     # eef_step
+    0.0,      # jump_threshold
+    False     # avoid_collisions
+)
+
 
     if fraction < 0.99:
         rospy.logwarn("[UR] IK fehlgeschlagen für '%s'.", direction)
