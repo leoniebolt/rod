@@ -15,3 +15,7 @@ install moveit
 sudo apt install ros-noetic-joint-trajectory-controller
 sudo apt install ros-noetic-position-controllers
 sudo apt install ros-noetic-ros-control*
+
+
+sudo apt update
+sudo apt install ros-noetic-joint-trajectory-controller
