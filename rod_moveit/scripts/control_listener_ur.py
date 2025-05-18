@@ -9,22 +9,19 @@ step_size = 0.01  # 1 cm pro Befehl
 
 def move_tcp(direction):
     current_pose = group.get_current_pose().pose
-    waypoints = []
-
-    # Zielpose auf Basis aktueller Pose definieren
     target_pose = geometry_msgs.msg.Pose()
     target_pose.position.x = current_pose.position.x
     target_pose.position.y = current_pose.position.y
     target_pose.position.z = current_pose.position.z
 
-    # Feste Orientierung setzen
-    q = quaternion_from_euler(0, 0, 0)  # Roll, Pitch, Yaw
+    # Feste Orientierung
+    q = quaternion_from_euler(0, 0, 0)
     target_pose.orientation.x = q[0]
     target_pose.orientation.y = q[1]
     target_pose.orientation.z = q[2]
     target_pose.orientation.w = q[3]
 
-    # Bewegungsrichtung setzen
+    # Richtung setzen
     if direction == "up":
         target_pose.position.z += step_size
     elif direction == "down":
@@ -41,20 +38,19 @@ def move_tcp(direction):
         rospy.loginfo("Bewegung gestoppt.")
         return
 
-    waypoints.append(target_pose)
+    waypoints = [target_pose]
 
-    # Cartesian Path berechnen (ROS Noetic-kompatibel!)
     (plan, fraction) = group.compute_cartesian_path(
         waypoints,
-        0.01,   # eef_step = 1 cm
+        0.01,   # Schrittweite
         0.0     # jump_threshold
     )
 
     if fraction > 0.9:
         group.execute(plan, wait=True)
-        rospy.loginfo(f"[UR] Lineare Bewegung '{direction}' ausgeführt ({fraction*100:.1f}%).")
+        rospy.loginfo(f"[UR] Bewegung '{direction}' ausgeführt ({fraction*100:.1f}%).")
     else:
-        rospy.logwarn(f"[UR] Lineare IK fehlgeschlagen für '{direction}', nur {fraction*100:.1f}% erreicht.")
+        rospy.logwarn(f"[UR] IK fehlgeschlagen für '{direction}', nur {fraction*100:.1f}% erreicht.")
 
 def callback(msg):
     move_tcp(msg.data)
