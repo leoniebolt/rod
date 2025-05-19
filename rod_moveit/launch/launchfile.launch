@@ -1,0 +1,7 @@
+<launch>
+    <include file="$(find rod_projekt2)/launch/gazebo_description.launch" />
+    <include file="$(find rod_moveit)/launch/move_group.launch" />
+    <include file="$(find rod_moveit)/launch/moveit_rviz.launch" >
+        <arg name="rviz_config" value="$(find rod_moveit)/launch/moveit.rviz"/>
+    </include>
+</launch>

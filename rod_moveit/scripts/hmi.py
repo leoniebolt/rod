@@ -1,74 +1,87 @@
 #!/usr/bin/env python3
 import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout
 import rospy
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QComboBox, QVBoxLayout, QLabel
-from PyQt5.QtCore import QTimer
 from std_msgs.msg import String
+<<<<<<< HEAD
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QComboBox, QVBoxLayout, QLabel
+=======
+>>>>>>> aedb43ab837998f1856a685f83b851b29b963343
 
 class RobotHMI(QWidget):
     def __init__(self):
         super().__init__()
-
+<<<<<<< HEAD
         rospy.init_node('qt_hmi_node', anonymous=True)
+        self.current_robot = 'scara'
 
-        self.publishers = {
-            "scara": rospy.Publisher("/scara_control_topic", String, queue_size=10),
-            "ur": rospy.Publisher("/ur_control_topic", String, queue_size=10)
-        }
-
-        self.current_robot = "scara"
+=======
+>>>>>>> aedb43ab837998f1856a685f83b851b29b963343
         self.initUI()
+        rospy.init_node('qt_hmi_node', anonymous=True)
+        self.publisher = rospy.Publisher('/robot_control_topic', String, queue_size=10)
 
     def initUI(self):
-        self.setWindowTitle("Roboter HMI")
+<<<<<<< HEAD
+        self.setWindowTitle('Roboter HMI')
 
-        main_layout = QVBoxLayout()
-        self.setLayout(main_layout)
+        layout = QVBoxLayout()
+        self.setLayout(layout)
 
-        # Dropdown zur Roboterwahl
         self.robot_selector = QComboBox()
-        self.robot_selector.addItems(["scara", "ur"])
+        self.robot_selector.addItems(['scara', 'ur'])
         self.robot_selector.currentTextChanged.connect(self.change_robot)
 
-        main_layout.addWidget(QLabel("Zielroboter:"))
-        main_layout.addWidget(self.robot_selector)
+        layout.addWidget(QLabel("Zielroboter:"))
+        layout.addWidget(self.robot_selector)
 
-        # Button-Layout
         grid = QGridLayout()
-        main_layout.addLayout(grid)
+=======
+        self.setWindowTitle('Robot Control HMI')
+        layout = QGridLayout()
+>>>>>>> aedb43ab837998f1856a685f83b851b29b963343
 
         self.buttons = {
-            "↑": "up", "↓": "down", "←": "left", "→": "right",
-            "⟲": "rotate_ccw", "⟳": "rotate_cw",
-            "Start": "start", "Stop": "stop"
+            '↑': 'up', '↓': 'down', '←': 'left', '→': 'right',
+            '⟲': 'rotate_ccw', '⟳': 'rotate_cw',
+            'Start': 'start', 'Stop': 'stop'
         }
 
         positions = {
-            "↑": (0, 1), "←": (1, 0), "→": (1, 2), "↓": (2, 1),
-            "⟲": (3, 0), "⟳": (3, 2), "Start": (4, 0), "Stop": (4, 2)
+            '↑': (0, 1), '←': (1, 0), '→': (1, 2), '↓': (2, 1),
+            '⟲': (3, 0), '⟳': (3, 2), 'Start': (4, 0), 'Stop': (4, 2)
         }
 
         for label, pos in positions.items():
             btn = QPushButton(label)
+<<<<<<< HEAD
+=======
             btn.setFixedSize(60, 60)
+>>>>>>> aedb43ab837998f1856a685f83b851b29b963343
             btn.clicked.connect(lambda _, cmd=self.buttons[label]: self.send_command(cmd))
-            grid.addWidget(btn, pos[0], pos[1])
+            layout.addWidget(btn, pos[0], pos[1])
 
+        self.setLayout(layout)
         self.resize(250, 300)
         self.show()
 
+<<<<<<< HEAD
     def change_robot(self, robot):
         self.current_robot = robot
-        rospy.loginfo(f"[HMI] Zielroboter geändert: {robot}")
 
     def send_command(self, command):
-        if self.current_robot in self.publishers:
-            self.publishers[self.current_robot].publish(String(data=command))
-            rospy.loginfo(f"[HMI] Befehl '{command}' an {self.current_robot}_control_topic gesendet.")
-        else:
-            rospy.logwarn(f"[HMI] Kein Publisher für Roboter '{self.current_robot}' gefunden.")
+        topic = f"/{self.current_robot}_control_topic"
+        pub = rospy.Publisher(topic, String, queue_size=10)
+        rospy.sleep(0.1)
+        pub.publish(command)
+        rospy.loginfo(f"Befehl '{command}' an {topic} gesendet.")
+=======
+    def send_command(self, command):
+        rospy.loginfo(f"Command sent: {command}")
+        self.publisher.publish(command)
+>>>>>>> aedb43ab837998f1856a685f83b851b29b963343
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app = QApplication(sys.argv)
     gui = RobotHMI()
     sys.exit(app.exec_())

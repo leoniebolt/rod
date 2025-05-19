@@ -2,30 +2,35 @@
 import rospy
 from std_msgs.msg import String
 import moveit_commander
-from tf.transformations import quaternion_from_euler
+import geometry_msgs.msg
+
+step_size = 0.05  # 5cm pro Befehl
 
 def move_tcp(direction):
-    # Aktuelle Pose holen
-    pose = group.get_current_pose().pose
-    step = 0.05  # Schrittgröße in Metern (5 cm)
+    current_pose = group.get_current_pose().pose
+    target_pose = geometry_msgs.msg.Pose()
+    target_pose.orientation = current_pose.orientation  # Orientierung beibehalten
 
-    # Zielposition modifizieren
+    # Ziel-Position setzen
+    target_pose.position = current_pose.position
+
     if direction == "up":
-        pose.position.z += step
+        target_pose.position.z += step_size
     elif direction == "down":
-        pose.position.z -= step
+        target_pose.position.z -= step_size
     elif direction == "left":
-        pose.position.y += step
+        target_pose.position.y += step_size
     elif direction == "right":
-        pose.position.y -= step
+        target_pose.position.y -= step_size
     elif direction == "forward":
-        pose.position.x += step
+        target_pose.position.x += step_size
     elif direction == "backward":
-        pose.position.x -= step
-    else:
-        rospy.logwarn(f"[UR] Ungültiger Befehl: {direction}")
+        target_pose.position.x -= step_size
+    elif direction == "stop":
+        rospy.loginfo("Bewegung gestoppt.")
         return
 
+<<<<<<< HEAD
 
     # IK: Lineare Bewegung mit compute_cartesian_path
     waypoints = [pose]
@@ -33,34 +38,28 @@ def move_tcp(direction):
         waypoints,
         eef_step=0.01,       # Auflösung: 1 cm Schritte
     )
+=======
+    group.set_pose_target(target_pose)
+    plan = group.go(wait=True)
+    group.stop()
+    group.clear_pose_targets()
+>>>>>>> 52b9fc0dfaecf3d38b8e638287cf121163ad3864
 
-    # Ausführung
-    if fraction > 0.9:
-        group.execute(plan, wait=True)
-        rospy.loginfo(f"[UR] Lineare Bewegung '{direction}' erfolgreich ausgeführt.")
+    if plan:
+        rospy.loginfo(f"[UR] Bewegung '{direction}' ausgeführt.")
     else:
-        rospy.logwarn(f"[UR] Pfad konnte nur zu {fraction*100:.1f}% geplant werden.")
+        rospy.logwarn(f"[UR] IK fehlgeschlagen für '{direction}'.")
 
 def callback(msg):
-    rospy.loginfo(f"[UR] Nachricht empfangen: {msg.data}")
-    if msg.data == "stop":
-        group.stop()
-        rospy.loginfo("[UR] Bewegung gestoppt.")
-    else:
-        move_tcp(msg.data)
+    move_tcp(msg.data)
 
 if __name__ == '__main__':
+    rospy.init_node('control_listener_ur')
     moveit_commander.roscpp_initialize([])
-    rospy.init_node('control_listener_ur', anonymous=True)
-
     robot = moveit_commander.RobotCommander()
     scene = moveit_commander.PlanningSceneInterface()
-    group = moveit_commander.MoveGroupCommander("sixaxis")
+    group = moveit_commander.MoveGroupCommander("sixaxis")  # ← Passe das ggf. an deinen MoveGroup-Namen an
 
-    group.set_max_velocity_scaling_factor(0.1)
-    group.set_max_acceleration_scaling_factor(0.1)
-
-    rospy.Subscriber("/ur_control_topic", String, callback)
-
-    rospy.loginfo("[UR] Steuerung bereit für Planungsgruppe 'sixaxis'")
+    rospy.Subscriber('/ur_control_topic', String, callback)
+    rospy.loginfo("UR Listener bereit.")
     rospy.spin()
