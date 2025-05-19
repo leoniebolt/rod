@@ -5,10 +5,11 @@ import moveit_commander
 from tf.transformations import quaternion_from_euler
 
 def move_tcp(direction):
+    # Aktuelle Pose holen
     pose = group.get_current_pose().pose
-    step = 0.05  # Schrittgröße
+    step = 0.05  # Schrittgröße in Metern (5 cm)
 
-    # Zielposition setzen
+    # Zielposition modifizieren
     if direction == "up":
         pose.position.z += step
     elif direction == "down":
@@ -25,22 +26,27 @@ def move_tcp(direction):
         rospy.logwarn(f"[UR] Ungültiger Befehl: {direction}")
         return
 
-    # Orientierung beibehalten (optional)
+    # Orientierung fixieren (z.B. gerade nach unten zeigen)
     q = quaternion_from_euler(0, 0, 0)
     pose.orientation.x = q[0]
     pose.orientation.y = q[1]
     pose.orientation.z = q[2]
     pose.orientation.w = q[3]
 
-    group.set_start_state_to_current_state()
-    group.set_pose_target(pose)
+    # IK: Lineare Bewegung mit compute_cartesian_path
+    waypoints = [pose]
+    (plan, fraction) = group.compute_cartesian_path(
+        waypoints,
+        eef_step=0.01,       # Auflösung: 1 cm Schritte
+        jump_threshold=0.0   # Keine Sprungvermeidung
+    )
 
-    success, plan, _, _ = group.plan()
-    if success:
+    # Ausführung
+    if fraction > 0.9:
         group.execute(plan, wait=True)
-        rospy.loginfo(f"[UR] Bewegung '{direction}' erfolgreich ausgeführt.")
+        rospy.loginfo(f"[UR] Lineare Bewegung '{direction}' erfolgreich ausgeführt.")
     else:
-        rospy.logwarn(f"[UR] Bewegung '{direction}' fehlgeschlagen.")
+        rospy.logwarn(f"[UR] Pfad konnte nur zu {fraction*100:.1f}% geplant werden.")
 
 def callback(msg):
     rospy.loginfo(f"[UR] Nachricht empfangen: {msg.data}")
@@ -61,7 +67,6 @@ if __name__ == '__main__':
     group.set_max_velocity_scaling_factor(0.1)
     group.set_max_acceleration_scaling_factor(0.1)
 
-    # Wichtig: Abonniere auf das HMI-Topic für UR
     rospy.Subscriber("/ur_control_topic", String, callback)
 
     rospy.loginfo("[UR] Steuerung bereit für Planungsgruppe 'sixaxis'")
