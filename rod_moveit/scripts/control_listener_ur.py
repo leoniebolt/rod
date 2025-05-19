@@ -5,15 +5,15 @@ import moveit_commander
 import geometry_msgs.msg
 import copy
 
-step_size = 0.001  # 5cm pro Befehl
+step_size = 0.05  # 5cm pro Befehl
 
 def move_tcp(direction):
-    current_pose = group.get_current_pose().pose
+    # current_pose = group.get_current_pose().pose
     target_pose = geometry_msgs.msg.Pose()
-    target_pose.orientation = current_pose.orientation  # Orientierung beibehalten
+    # target_pose.orientation = current_pose.orientation  # Orientierung beibehalten
 
     # Ziel-Position setzen
-    target_pose.position = current_pose.position
+    # target_pose.position = current_pose.position
 
     if direction == "up":
         target_pose.position.z += step_size
@@ -33,13 +33,17 @@ def move_tcp(direction):
 
 
     # IK: Lineare Bewegung mit compute_cartesian_path
+    print(target_pose)
     waypoints = [target_pose]
     (plan, fraction) = group.compute_cartesian_path(
         waypoints,
         eef_step=0.01,       # Auflösung: 1 cm Schritte
     )
-    
+    group.set_pose_reference_frame("sixaxis_j6")
     group.execute(plan, wait=True)
+    waypoints = []
+    group.stop()
+    group.clear_pose_targets()
     rospy.loginfo(f"[UR] Bewegung '{direction}' ausgeführt.")
 
 def callback(msg):
@@ -52,7 +56,7 @@ if __name__ == '__main__':
     robot = moveit_commander.RobotCommander()
     scene = moveit_commander.PlanningSceneInterface()
     group = moveit_commander.MoveGroupCommander("sixaxis")  # Passe das ggf. an deinen MoveGroup-Namen an
-    group.set_pose_reference_frame("sixaxis_j6")
+    
 
     rospy.Subscriber('/ur_control_topic', String, callback)
     rospy.loginfo("UR Listener bereit.")
