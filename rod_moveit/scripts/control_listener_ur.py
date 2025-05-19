@@ -6,10 +6,9 @@ from tf.transformations import quaternion_from_euler
 
 def move_tcp(direction):
     pose = group.get_current_pose().pose
-    waypoints = []
-
     step = 0.05  # 5 cm Schrittgröße
 
+    # Richtung verarbeiten
     if direction == "up":
         pose.position.z += step
     elif direction == "down":
@@ -26,28 +25,17 @@ def move_tcp(direction):
         rospy.logwarn(f"[UR] Ungültiger Befehl: {direction}")
         return
 
-    # Orientierung aufrecht erhalten (optional)
-    q = quaternion_from_euler(0, 0, 0)
-    pose.orientation.x = q[0]
-    pose.orientation.y = q[1]
-    pose.orientation.z = q[2]
-    pose.orientation.w = q[3]
+    # Bewegung vorbereiten
+    group.set_start_state_to_current_state()
+    group.set_pose_target(pose)
 
-    waypoints.append(pose)
-
-    (plan, fraction) = group.compute_cartesian_path(
-        waypoints,
-        0.01,  # eef_step
-        0.0    # jump_threshold
-    )
-
-    rospy.loginfo(f"[UR] Pfad geplant (Fraktion: {fraction:.2f})")
-
-    if fraction > 0.5:
+    # Planung durchführen (Inverse Kinematik intern)
+    success, plan, _, _ = group.plan()
+    if success:
         group.execute(plan, wait=True)
-        rospy.loginfo(f"[UR] Bewegung in Richtung '{direction}' ausgeführt.")
+        rospy.loginfo(f"[UR] Bewegung '{direction}' erfolgreich ausgeführt.")
     else:
-        rospy.logwarn(f"[UR] Bewegung fehlgeschlagen (Fraktion: {fraction:.2f})")
+        rospy.logwarn(f"[UR] Bewegung '{direction}' fehlgeschlagen.")
 
 def callback(msg):
     if msg.data == "stop":
