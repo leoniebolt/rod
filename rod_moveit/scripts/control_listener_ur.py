@@ -2,12 +2,13 @@
 import rospy
 from std_msgs.msg import String
 import moveit_commander
+from tf.transformations import quaternion_from_euler
 
 def move_tcp(direction):
     pose = group.get_current_pose().pose
-    step = 0.05  # 5 cm Schrittgröße
-    waypoints = []
+    step = 0.05  # Schrittgröße
 
+    # Zielposition setzen
     if direction == "up":
         pose.position.z += step
     elif direction == "down":
@@ -24,20 +25,25 @@ def move_tcp(direction):
         rospy.logwarn(f"[UR] Ungültiger Befehl: {direction}")
         return
 
-    waypoints.append(pose)
+    # Orientierung beibehalten (optional)
+    q = quaternion_from_euler(0, 0, 0)
+    pose.orientation.x = q[0]
+    pose.orientation.y = q[1]
+    pose.orientation.z = q[2]
+    pose.orientation.w = q[3]
 
-    plan, fraction = group.compute_cartesian_path(
-        waypoints,
-        0.01  # eef_step
-    )
+    group.set_start_state_to_current_state()
+    group.set_pose_target(pose)
 
-    if fraction > 0.9:
+    success, plan, _, _ = group.plan()
+    if success:
         group.execute(plan, wait=True)
-        rospy.loginfo(f"[UR] Bewegung '{direction}' erfolgreich ausgeführt (Fraktion: {fraction:.2f}).")
+        rospy.loginfo(f"[UR] Bewegung '{direction}' erfolgreich ausgeführt.")
     else:
-        rospy.logwarn(f"[UR] Cartesian Path unvollständig (Fraktion: {fraction:.2f}).")
+        rospy.logwarn(f"[UR] Bewegung '{direction}' fehlgeschlagen.")
 
 def callback(msg):
+    rospy.loginfo(f"[UR] Nachricht empfangen: {msg.data}")
     if msg.data == "stop":
         group.stop()
         rospy.loginfo("[UR] Bewegung gestoppt.")
@@ -55,6 +61,8 @@ if __name__ == '__main__':
     group.set_max_velocity_scaling_factor(0.1)
     group.set_max_acceleration_scaling_factor(0.1)
 
-    rospy.Subscriber("/robot_control_topic", String, callback)
+    # Wichtig: Abonniere auf das HMI-Topic für UR
+    rospy.Subscriber("/ur_control_topic", String, callback)
+
     rospy.loginfo("[UR] Steuerung bereit für Planungsgruppe 'sixaxis'")
     rospy.spin()
