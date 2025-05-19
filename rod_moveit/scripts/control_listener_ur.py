@@ -9,7 +9,11 @@ step_size = 0.05  # 5cm pro Befehl
 
 def move_tcp(direction):
     current_pose = group.get_current_pose().pose
-    target_pose = copy.deepcopy(current_pose)  # sichere Kopie der Pose
+    target_pose = geometry_msgs.msg.Pose()
+    target_pose.orientation = current_pose.orientation  # Orientierung beibehalten
+
+    # Ziel-Position setzen
+    target_pose.position = current_pose.position
 
     if direction == "up":
         target_pose.position.z += step_size
@@ -27,14 +31,19 @@ def move_tcp(direction):
         rospy.loginfo("Bewegung gestoppt.")
         return
 
-    waypoints = [target_pose]
-    (plan, fraction) = group.compute_cartesian_path(waypoints, eef_step=0.01, jump_threshold=0.0)
 
-    if fraction > 0.95:
-        rospy.loginfo(f"[UR] Bewegung '{direction}' geplant. Starte Ausführung...")
-        group.execute(plan, wait=True)
+    # IK: Lineare Bewegung mit compute_cartesian_path
+    waypoints = [target_pose]
+    (plan, fraction) = group.compute_cartesian_path(
+        waypoints,
+        eef_step=0.01,       # Auflösung: 1 cm Schritte
+    )
+
+    if fraction < 1.0:
+      rospy.logwarn(f"[UR] IK fehlgeschlagen oder unvollständig für '{direction}' (Pfad-Fraction: {fraction:.2f})")
     else:
-        rospy.logwarn(f"[UR] IK fehlgeschlagen oder unvollständig für '{direction}' (Pfad-Fraction: {fraction:.2f})")
+      group.execute(plan, wait=True)
+      rospy.loginfo(f"[UR] Bewegung '{direction}' ausgeführt.")
 
 def callback(msg):
     move_tcp(msg.data)
