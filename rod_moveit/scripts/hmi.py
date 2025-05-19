@@ -13,7 +13,7 @@ class RobotHMI(QWidget):
 
         self.publishers = {
             "scara": rospy.Publisher("/scara_control_topic", String, queue_size=10),
-            "ur": rospy.Publisher("/robot_control_topic", String, queue_size=10)
+            "ur": rospy.Publisher("/ur_control_topic", String, queue_size=10)
         }
 
         self.current_robot = "scara"
