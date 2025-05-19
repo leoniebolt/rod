@@ -30,6 +30,7 @@ def move_tcp(direction):
         rospy.loginfo("Bewegung gestoppt.")
         return
 
+<<<<<<< HEAD
 
     # IK: Lineare Bewegung mit compute_cartesian_path
     waypoints = [pose]
@@ -37,6 +38,12 @@ def move_tcp(direction):
         waypoints,
         eef_step=0.01,       # Auflösung: 1 cm Schritte
     )
+=======
+    group.set_pose_target(target_pose)
+    plan = group.go(wait=True)
+    group.stop()
+    group.clear_pose_targets()
+>>>>>>> 6c2786558b8851b5d42eb4699ed18e5f089278fd
 
     if plan:
         rospy.loginfo(f"[UR] Bewegung '{direction}' ausgeführt.")
