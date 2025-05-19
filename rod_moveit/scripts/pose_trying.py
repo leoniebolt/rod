@@ -20,15 +20,12 @@ class DemoRobot:
         self.move_group.set_max_acceleration_scaling_factor(1)
         self.move_group.set_max_velocity_scaling_factor(1)
         
-        self.move_group.set_goal_tolerance(0.5)
+        self.move_group.set_goal_tolerance(0.1)
         self.goals = []
         
         self.move_group = moveit_commander.MoveGroupCommander(groupname)
         self.groupname = groupname
 
-        self.move_group.set_max_acceleration_scaling_factor(1.0)
-        self.move_group.set_max_velocity_scaling_factor(1.0)
-        self.move_group.set_goal_tolerance(0.001)
 
 
     def get_current_pose(self):
@@ -96,6 +93,8 @@ class DemoRobot:
             #except:
             #    print("Reference Frame does not exist!")
 
+    
+            
 
 if __name__ == "__main__":
     
@@ -107,11 +106,20 @@ if __name__ == "__main__":
     # Zielposen für Six-Axis
     sa_poses = {
         # WERTE NICHT VERÄNDERN !!!!
-        "sixaxis_home": geometry_msgs.msg.Pose(
-            position=geometry_msgs.msg.Point(x=-0.864, y=-1.123, z=1.584),
-            orientation=geometry_msgs.msg.Quaternion(x=0.701, y=-0.002, z=0.713, w=0.000)
+        "test": geometry_msgs.msg.Pose(
+            position=geometry_msgs.msg.Point(x=-2.747, y=-1.026, z=0.984),
+            orientation=geometry_msgs.msg.Quaternion(x=-0.720, y=-0.694, z=0.001, w=0.018)
+        ),
+        "test2": geometry_msgs.msg.Pose(
+            position=geometry_msgs.msg.Point(x=-2.747, y=-1.026, z=0.9),
+            orientation=geometry_msgs.msg.Quaternion(x=-0.720, y=-0.694, z=0.001, w=0.018)
         ),
 
+
+        "sixaxis_home": geometry_msgs.msg.Pose(
+            position=geometry_msgs.msg.Point(x=-0.871, y=-1.120, z=1.231),
+            orientation=geometry_msgs.msg.Quaternion(x=1.000, y=0.005, z=-0.007, w=0.005)
+        ),
         "sa_above_pick_up": geometry_msgs.msg.Pose(
             position=geometry_msgs.msg.Point(x=-0.868, y=-1.087, z=1.369),
             orientation=geometry_msgs.msg.Quaternion(x=0.999, y=0.016, z=0.030, w=0.001)
@@ -156,10 +164,10 @@ if __name__ == "__main__":
         )
     }
 
-    """
+
     # SCARA
 
-    print("\n. \n. \n")
+    """ print("\n. \n. \n")
     scara.move_to_pose(s_poses["scara_home"], "SCARA home")
     scara.get_current_pose()
 
@@ -185,21 +193,20 @@ if __name__ == "__main__":
 
     print("\n. \n. \n")
     scara.move_to_pose(s_poses["s_above_place"], "SCARA above_place")
-    scara.get_current_pose()
+    scara.get_current_pose() """
 
     
-"""
+
 
 
     # SIXAXIS
     sixaxis.get_current_pose()
-
-
-    print("\n. \n. \n")
-    sixaxis.move_to_pose(sa_poses["sixaxis_home"], "SIXAXIS home")
+    sixaxis.move_to_pose(sa_poses["sa_above_pick_up"], "SIXAXIS above_pick_up")
     sixaxis.get_current_pose()
 
-    print("\n. \n. \n")
+
+
+    """     print("\n. \n. \n")
     sixaxis.move_to_pose(sa_poses["sa_above_pick_up"], "SIXAXIS above_pick_up")
     sixaxis.get_current_pose()
     
@@ -221,7 +228,7 @@ if __name__ == "__main__":
 
     print("\n. \n. \n")
     sixaxis.move_to_pose(sa_poses["sa_above_place"], "SIXAXIS above_place")
-    sixaxis.get_current_pose()
+    sixaxis.get_current_pose() """
 
 
     #print("\n. \n. \n")
@@ -238,6 +245,17 @@ if __name__ == "__main__":
     #sixaxis.move_to_pose(sa_poses["pre_post_place"], "SixAxis pre_post_place")
     #sixaxis.move_to_pose(sa_poses["place"], "SixAxis place")
     #sixaxis.move_to_pose(sa_poses["pre_post_place"], "SixAxis pre_post_place")
-    """
+    
 
-"""
+    """     sixaxis.get_current_pose()
+    sixaxis.move_to_pose(sa_poses["test"], "SIXAXIS home")
+    sixaxis.get_current_pose()
+
+    print("\n. \n. \n")
+    sixaxis.move_to_pose(sa_poses["test2"], "SIXAXIS above_pick_up")
+    sixaxis.get_current_pose() 
+
+
+    print("\n. \n. \n")
+    sixaxis.move_to_pose(sa_poses["sixaxis_home"], "SIXAXIS home")
+    sixaxis.get_current_pose() """
