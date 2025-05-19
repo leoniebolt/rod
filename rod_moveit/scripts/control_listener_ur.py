@@ -8,25 +8,25 @@ def move_tcp(direction):
     pose = group.get_current_pose().pose
     waypoints = []
 
-    delta = 0.05  # Schrittgröße (m)
+    step = 0.05  # 5 cm Schrittgröße
 
     if direction == "up":
-        pose.position.z += delta
+        pose.position.z += step
     elif direction == "down":
-        pose.position.z -= delta
+        pose.position.z -= step
     elif direction == "left":
-        pose.position.y += delta
+        pose.position.y += step
     elif direction == "right":
-        pose.position.y -= delta
+        pose.position.y -= step
     elif direction == "forward":
-        pose.position.x += delta
+        pose.position.x += step
     elif direction == "backward":
-        pose.position.x -= delta
+        pose.position.x -= step
     else:
         rospy.logwarn(f"[UR] Ungültiger Befehl: {direction}")
         return
 
-    # Behalte Orientierung bei
+    # Orientierung aufrecht erhalten (optional)
     q = quaternion_from_euler(0, 0, 0)
     pose.orientation.x = q[0]
     pose.orientation.y = q[1]
@@ -35,19 +35,19 @@ def move_tcp(direction):
 
     waypoints.append(pose)
 
-    plan, fraction = group.compute_cartesian_path(
+    # Nur zwei Argumente verwenden!
+    (plan, fraction) = group.compute_cartesian_path(
         waypoints,
-        0.01,  # eef_step
-        0.0    # jump_threshold
+        0.01  # eef_step
     )
 
-    rospy.loginfo(f"[UR] Pfad geplant mit Fraktion: {fraction:.2f}")
+    rospy.loginfo(f"[UR] Pfad geplant (Fraktion: {fraction:.2f})")
 
-    if fraction < 0.5:
-        rospy.logwarn("[UR] Bewegung nicht möglich, Pfad unvollständig.")
+    if fraction > 0.5:
+        group.execute(plan, wait=True)
+        rospy.loginfo(f"[UR] Bewegung in Richtung '{direction}' ausgeführt.")
     else:
-        success = group.execute(plan, wait=True)
-        rospy.loginfo(f"[UR] Bewegung ausgeführt: {success}")
+        rospy.logwarn(f"[UR] Bewegung fehlgeschlagen (Fraktion: {fraction:.2f})")
 
 def callback(msg):
     if msg.data == "stop":
