@@ -38,7 +38,6 @@ def move_tcp(direction):
     (plan, fraction) = group.compute_cartesian_path(
         waypoints,
         eef_step=0.01,       # Auflösung: 1 cm Schritte
-        jump_threshold=0.0   # Keine Sprungvermeidung
     )
 
     # Ausführung
