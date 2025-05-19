@@ -38,11 +38,11 @@ def move_tcp(direction):
         eef_step=0.01,       # Auflösung: 1 cm Schritte
     )
 
-    if plan and fraction > 0.7:
-        group.execute(plan, wait=True)
-        rospy.loginfo(f"[UR] Bewegung '{direction}' erfolgreich ausgeführt.")
+    if fraction < 1.0:
+      rospy.logwarn(f"[UR] IK fehlgeschlagen oder unvollständig für '{direction}' (Pfad-Fraction: {fraction:.2f})")
     else:
-        rospy.logwarn(f"[UR] IK fehlgeschlagen oder unvollständig für '{direction}' (Pfad-Fraction: {fraction:.2f})")
+      group.execute(plan, wait=True)
+      rospy.loginfo(f"[UR] Bewegung '{direction}' ausgeführt.")
 
 def callback(msg):
     move_tcp(msg.data)
