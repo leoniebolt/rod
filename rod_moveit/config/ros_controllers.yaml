@@ -67,8 +67,6 @@ scara_controller:
       i: 1
       i_clamp: 1
 
-<<<<<<< HEAD
-  # Goal constraints für jeden joint definieren -> siehe example project von moodle
   constraints:
     goal_time: 0.1
     stopped_velocity_tolerance: 0.1
