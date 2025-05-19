@@ -5,9 +5,8 @@ import moveit_commander
 
 def move_tcp(direction):
     pose = group.get_current_pose().pose
+    step = 0.05  # 5 cm Schrittgröße
     waypoints = []
-
-    step = 0.05  # Schrittgröße in Metern (5 cm)
 
     if direction == "up":
         pose.position.z += step
@@ -27,18 +26,16 @@ def move_tcp(direction):
 
     waypoints.append(pose)
 
-    # Cartesian path berechnen (linear am TCP)
     plan, fraction = group.compute_cartesian_path(
         waypoints,
-        eef_step=0.01,  # Schrittweite des Endeffektors (m)
-        jump_threshold=0.0  # kein Sprung zwischen Punkten erlaubt
+        0.01  # eef_step
     )
 
     if fraction > 0.9:
         group.execute(plan, wait=True)
         rospy.loginfo(f"[UR] Bewegung '{direction}' erfolgreich ausgeführt (Fraktion: {fraction:.2f}).")
     else:
-        rospy.logwarn(f"[UR] Cartesian Path konnte nicht vollständig geplant werden (Fraktion: {fraction:.2f}).")
+        rospy.logwarn(f"[UR] Cartesian Path unvollständig (Fraktion: {fraction:.2f}).")
 
 def callback(msg):
     if msg.data == "stop":
