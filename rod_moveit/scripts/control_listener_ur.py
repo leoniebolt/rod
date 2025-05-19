@@ -30,7 +30,6 @@ def move_tcp(direction):
         rospy.loginfo("Bewegung gestoppt.")
         return
 
-<<<<<<< HEAD
 
     # IK: Lineare Bewegung mit compute_cartesian_path
     waypoints = [pose]
@@ -38,12 +37,6 @@ def move_tcp(direction):
         waypoints,
         eef_step=0.01,       # Auflösung: 1 cm Schritte
     )
-=======
-    group.set_pose_target(target_pose)
-    plan = group.go(wait=True)
-    group.stop()
-    group.clear_pose_targets()
->>>>>>> 52b9fc0dfaecf3d38b8e638287cf121163ad3864
 
     if plan:
         rospy.loginfo(f"[UR] Bewegung '{direction}' ausgeführt.")
@@ -58,7 +51,8 @@ if __name__ == '__main__':
     moveit_commander.roscpp_initialize([])
     robot = moveit_commander.RobotCommander()
     scene = moveit_commander.PlanningSceneInterface()
-    group = moveit_commander.MoveGroupCommander("sixaxis")  # ← Passe das ggf. an deinen MoveGroup-Namen an
+    group = moveit_commander.MoveGroupCommander("sixaxis")  # Passe das ggf. an deinen MoveGroup-Namen an
+    group.set_pose_reference_frame("sixaxis_j6")
 
     rospy.Subscriber('/ur_control_topic', String, callback)
     rospy.loginfo("UR Listener bereit.")
