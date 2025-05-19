@@ -35,10 +35,10 @@ def move_tcp(direction):
 
     waypoints.append(pose)
 
-    # Nur zwei Argumente verwenden!
     (plan, fraction) = group.compute_cartesian_path(
         waypoints,
-        0.01  # eef_step
+        0.01,  # eef_step
+        0.0    # jump_threshold
     )
 
     rospy.loginfo(f"[UR] Pfad geplant (Fraktion: {fraction:.2f})")
