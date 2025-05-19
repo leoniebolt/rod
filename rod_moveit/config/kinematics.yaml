@@ -4,7 +4,7 @@ sixaxis:
   #kinematics_solver_attempts: 3
   kinematics_solver_timeout: 0.5
   goal_joint_tolerance: 0.01
-  goal_position_tolerance: 0.05
+  goal_position_tolerance: 0.5
   goal_orientation_tolerance: 0.05
 scara:
   kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
@@ -12,5 +12,5 @@ scara:
   #kinematics_solver_attempts: 3
   kinematics_solver_timeout: 0.5
   goal_joint_tolerance: 0.01
-  goal_position_tolerance: 0.05
+  goal_position_tolerance: 0.5
   goal_orientation_tolerance: 0.05

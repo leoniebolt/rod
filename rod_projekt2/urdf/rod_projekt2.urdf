@@ -1258,14 +1258,22 @@
 
     <!-- In der URDF: Gazebo-Plugin mit Namespace -->
     <gazebo>
+    <!--
         <plugin name="scara_control" filename="libgazebo_ros_control.so">
             <robotNamespace>/scara</robotNamespace>
         </plugin>
         <plugin name="sixaxis_control" filename="libgazebo_ros_control.so">
             <robotNamespace>/sixaxis</robotNamespace>
         </plugin>
+        -->
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
             <robotNamespace>/</robotNamespace>
+        </plugin>
+    </gazebo>
+
+    <gazebo>
+        <plugin name = "joint_state_publisher" filename = "libgazebo_ros_joint_state_publisher.so" >
+		<jointName>sj1, sj2, sj3, sjEE, saj1, saj2, saj3, saj4, saj5, saj6, saEE1, saEE2</jointName>
         </plugin>
     </gazebo>
 

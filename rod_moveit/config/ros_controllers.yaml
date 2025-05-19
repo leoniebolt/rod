@@ -66,3 +66,38 @@ scara_controller:
       d: 1
       i: 1
       i_clamp: 1
+
+  # Goal constraints für jeden joint definieren -> siehe example project von moodle
+  constraints:
+    goal_time: 0.1
+    stopped_velocity_tolerance: 0.1
+    saj1:
+      goal: 0.1
+      trajectory: 0.05
+    saj2:
+      goal: 0.1
+      trajectory: 0.05
+    saj3:
+      goal: 0.1
+      trajectory: 0.05
+    saj4:
+      goal: 0.1
+      trajectory: 0.05
+    saj5:
+      goal: 0.1
+      trajectory: 0.05
+    saj6:
+      goal: 0.1
+      trajectory: 0.05
+    sj1:
+      goal: 0.1
+      trajectory: 0.05
+    sj2:
+      goal: 0.1
+      trajectory: 0.05
+    sj3:
+      goal: 0.1
+      trajectory: 0.05
+    sajEE:
+      goal: 0.1
+      trajectory: 0.05
