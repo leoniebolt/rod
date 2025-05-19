@@ -93,6 +93,24 @@ class DemoRobot:
             #except:
             #    print("Reference Frame does not exist!")
 
+            # We get the joint values from the group and change some of the values:
+        tau = 6.28
+        joint_goal = move_group.get_current_joint_values()
+        joint_goal[0] = 0
+        joint_goal[1] = -tau / 8
+        joint_goal[2] = 0
+        joint_goal[3] = -tau / 4
+        joint_goal[4] = 0
+        joint_goal[5] = tau / 6  # 1/6 of a turn
+        joint_goal[6] = 0
+
+# The go command can be called with joint values, poses, or without any
+# parameters if you have already set the pose or joint target for the group
+        move_group.go(joint_goal, wait=True)
+
+# Calling ``stop()`` ensures that there is no residual movement
+        move_group.stop()
+
     
             
 
@@ -201,7 +219,7 @@ if __name__ == "__main__":
 
     # SIXAXIS
     sixaxis.get_current_pose()
-    sixaxis.move_to_pose(sa_poses["sa_above_pick_up"], "SIXAXIS above_pick_up")
+    sixaxis.move_to_pose(sa_poses["sixaxis_home"], "SIXAXIS above_pick_up")
     sixaxis.get_current_pose()
 
 
