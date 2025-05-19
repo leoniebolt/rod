@@ -26,12 +26,6 @@ def move_tcp(direction):
         rospy.logwarn(f"[UR] Ungültiger Befehl: {direction}")
         return
 
-    # Orientierung fixieren (z.B. gerade nach unten zeigen)
-    q = quaternion_from_euler(0, 0, 0)
-    pose.orientation.x = q[0]
-    pose.orientation.y = q[1]
-    pose.orientation.z = q[2]
-    pose.orientation.w = q[3]
 
     # IK: Lineare Bewegung mit compute_cartesian_path
     waypoints = [pose]
