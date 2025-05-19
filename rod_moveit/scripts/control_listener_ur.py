@@ -38,7 +38,7 @@ def move_tcp(direction):
         eef_step=0.01,       # Auflösung: 1 cm Schritte
     )
 
-    if plan and fraction > 0.9:
+    if plan and fraction > 0.7:
         group.execute(plan, wait=True)
         rospy.loginfo(f"[UR] Bewegung '{direction}' erfolgreich ausgeführt.")
     else:
