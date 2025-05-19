@@ -106,21 +106,19 @@ if __name__ == "__main__":
 
     # Zielposen für Six-Axis
     sa_poses = {
-        # WERTE NICHT VERÄNDERN
+        # WERTE NICHT VERÄNDERN !!!!
         "sixaxis_home": geometry_msgs.msg.Pose(
-            position=geometry_msgs.msg.Point(x=-0.864, y=-1.120, z=1.587),
-            orientation=geometry_msgs.msg.Quaternion(x=-0.702, y=0.000, z=-0.712, w=0.000)
+            position=geometry_msgs.msg.Point(x=-0.864, y=-1.123, z=1.584),
+            orientation=geometry_msgs.msg.Quaternion(x=0.701, y=-0.002, z=0.713, w=0.000)
         ),
-
-
 
         "sa_above_pick_up": geometry_msgs.msg.Pose(
-            position=geometry_msgs.msg.Point(x=-0.869, y=-1.125, z=1.403),
-            orientation=geometry_msgs.msg.Quaternion(x=0.686, y=-0.727, z=-0.006, w=0.003)
+            position=geometry_msgs.msg.Point(x=-0.868, y=-1.087, z=1.369),
+            orientation=geometry_msgs.msg.Quaternion(x=0.999, y=0.016, z=0.030, w=0.001)
         ),
         "sa_pick_up": geometry_msgs.msg.Pose(
-            position=geometry_msgs.msg.Point(x=-0.875, y=-1.115, z=1.196),
-            orientation=geometry_msgs.msg.Quaternion(x=0.691, y=-0.723, z=-0.008, w=0.002)
+            position=geometry_msgs.msg.Point(x=-0.858, y=-1.087, z=1.198),
+            orientation=geometry_msgs.msg.Quaternion(x=-1.000, y=-0.012, z=-0.022, w=0.005)
         ),
         "sa_above_place": geometry_msgs.msg.Pose(
             position=geometry_msgs.msg.Point(x=-2.425, y=-1.040, z=1.067),
@@ -140,10 +138,6 @@ if __name__ == "__main__":
             orientation=geometry_msgs.msg.Quaternion(x=0.998, y=-0.065, z=0.000, w=0.000)
         ),
 
-        # weiteste was ich bis jetzt gekommen bin :
-        # position=geometry_msgs.msg.Point(x=2.55, y=-0.2, z=1.2),
-        # orientation=geometry_msgs.msg.Quaternion(x=0.998, y=-0.065, z=0.000, w=0.000)
-
         "s_above_pick_up": geometry_msgs.msg.Pose(
             position=geometry_msgs.msg.Point(x=2.55, y=-0.2, z=1.2),
             orientation=geometry_msgs.msg.Quaternion(x=0.998, y=-0.065, z=0.000, w=0.000)
@@ -162,43 +156,44 @@ if __name__ == "__main__":
         )
     }
 
-
+    """
     # SCARA
 
-    #print("\n. \n. \n")
-    #scara.move_to_pose(s_poses["scara_home"], "SCARA home")
-    #scara.get_current_pose()
+    print("\n. \n. \n")
+    scara.move_to_pose(s_poses["scara_home"], "SCARA home")
+    scara.get_current_pose()
 
-    #print("\n. \n. \n")
-    #scara.move_to_pose(s_poses["s_above_pick_up"], "SCARA above_pick_up")
-    #scara.get_current_pose()
+    print("\n. \n. \n")
+    scara.move_to_pose(s_poses["s_above_pick_up"], "SCARA above_pick_up")
+    scara.get_current_pose()
 
-    #print("\n. \n. \n")
-    #scara.move_to_pose(s_poses["s_pick_up"], "SCARA pick_up")
-    #scara.get_current_pose()
+    print("\n. \n. \n")
+    scara.move_to_pose(s_poses["s_pick_up"], "SCARA pick_up")
+    scara.get_current_pose()
 
-    #print("\n. \n. \n")
-    #scara.move_to_pose(s_poses["s_above_pick_up"], "SCARA above_pick_up")
-    #scara.get_current_pose()
+    print("\n. \n. \n")
+    scara.move_to_pose(s_poses["s_above_pick_up"], "SCARA above_pick_up")
+    scara.get_current_pose()
 
-    #print("\n. \n. \n")
-    #scara.move_to_pose(s_poses["s_above_place"], "SCARA above_place")
-    #scara.get_current_pose()
+    print("\n. \n. \n")
+    scara.move_to_pose(s_poses["s_above_place"], "SCARA above_place")
+    scara.get_current_pose()
 
-    #print("\n. \n. \n")
-    #scara.move_to_pose(s_poses["s_place"], "SCARA place")
-    #scara.get_current_pose()
+    print("\n. \n. \n")
+    scara.move_to_pose(s_poses["s_place"], "SCARA place")
+    scara.get_current_pose()
 
-    #print("\n. \n. \n")
-    #scara.move_to_pose(s_poses["s_above_place"], "SCARA above_place")
-    #scara.get_current_pose()
+    print("\n. \n. \n")
+    scara.move_to_pose(s_poses["s_above_place"], "SCARA above_place")
+    scara.get_current_pose()
 
     
+"""
+
 
     # SIXAXIS
-    print("\n. \n. \n")
     sixaxis.get_current_pose()
-    
+
 
     print("\n. \n. \n")
     sixaxis.move_to_pose(sa_poses["sixaxis_home"], "SIXAXIS home")
@@ -243,3 +238,6 @@ if __name__ == "__main__":
     #sixaxis.move_to_pose(sa_poses["pre_post_place"], "SixAxis pre_post_place")
     #sixaxis.move_to_pose(sa_poses["place"], "SixAxis place")
     #sixaxis.move_to_pose(sa_poses["pre_post_place"], "SixAxis pre_post_place")
+    """
+
+"""
