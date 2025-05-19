@@ -5,7 +5,7 @@ import moveit_commander
 import geometry_msgs.msg
 import copy
 
-step_size = 0.05  # 5cm pro Befehl
+step_size = 0.001  # 5cm pro Befehl
 
 def move_tcp(direction):
     current_pose = group.get_current_pose().pose
@@ -38,14 +38,12 @@ def move_tcp(direction):
         waypoints,
         eef_step=0.01,       # Auflösung: 1 cm Schritte
     )
-
-    if fraction < 1.0:
-      rospy.logwarn(f"[UR] IK fehlgeschlagen oder unvollständig für '{direction}' (Pfad-Fraction: {fraction:.2f})")
-    else:
-      group.execute(plan, wait=True)
-      rospy.loginfo(f"[UR] Bewegung '{direction}' ausgeführt.")
+    
+    group.execute(plan, wait=True)
+    rospy.loginfo(f"[UR] Bewegung '{direction}' ausgeführt.")
 
 def callback(msg):
+    print("test")
     move_tcp(msg.data)
 
 if __name__ == '__main__':
