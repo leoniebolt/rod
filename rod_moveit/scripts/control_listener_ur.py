@@ -2,13 +2,13 @@
 import rospy
 from std_msgs.msg import String
 import moveit_commander
-from tf.transformations import quaternion_from_euler
 
 def move_tcp(direction):
     pose = group.get_current_pose().pose
-    step = 0.05  # 5 cm Schrittgröße
+    waypoints = []
 
-    # Richtung verarbeiten
+    step = 0.05  # Schrittgröße in Metern (5 cm)
+
     if direction == "up":
         pose.position.z += step
     elif direction == "down":
@@ -25,17 +25,20 @@ def move_tcp(direction):
         rospy.logwarn(f"[UR] Ungültiger Befehl: {direction}")
         return
 
-    # Bewegung vorbereiten
-    group.set_start_state_to_current_state()
-    group.set_pose_target(pose)
+    waypoints.append(pose)
 
-    # Planung durchführen (Inverse Kinematik intern)
-    success, plan, _, _ = group.plan()
-    if success:
+    # Cartesian path berechnen (linear am TCP)
+    plan, fraction = group.compute_cartesian_path(
+        waypoints,
+        eef_step=0.01,  # Schrittweite des Endeffektors (m)
+        jump_threshold=0.0  # kein Sprung zwischen Punkten erlaubt
+    )
+
+    if fraction > 0.9:
         group.execute(plan, wait=True)
-        rospy.loginfo(f"[UR] Bewegung '{direction}' erfolgreich ausgeführt.")
+        rospy.loginfo(f"[UR] Bewegung '{direction}' erfolgreich ausgeführt (Fraktion: {fraction:.2f}).")
     else:
-        rospy.logwarn(f"[UR] Bewegung '{direction}' fehlgeschlagen.")
+        rospy.logwarn(f"[UR] Cartesian Path konnte nicht vollständig geplant werden (Fraktion: {fraction:.2f}).")
 
 def callback(msg):
     if msg.data == "stop":
