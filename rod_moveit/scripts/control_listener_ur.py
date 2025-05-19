@@ -5,53 +5,54 @@ import moveit_commander
 from tf.transformations import quaternion_from_euler
 
 def move_tcp(direction):
-    pose_target = group.get_current_pose().pose
+    pose = group.get_current_pose().pose
     waypoints = []
 
-    step_size = 0.05  # 5 cm
+    delta = 0.05  # Schrittgröße (m)
 
     if direction == "up":
-        pose_target.position.z += step_size
+        pose.position.z += delta
     elif direction == "down":
-        pose_target.position.z -= step_size
+        pose.position.z -= delta
     elif direction == "left":
-        pose_target.position.y += step_size
+        pose.position.y += delta
     elif direction == "right":
-        pose_target.position.y -= step_size
+        pose.position.y -= delta
     elif direction == "forward":
-        pose_target.position.x += step_size
+        pose.position.x += delta
     elif direction == "backward":
-        pose_target.position.x -= step_size
+        pose.position.x -= delta
     else:
-        rospy.logwarn("[UR] Ungültige Richtung: %s", direction)
+        rospy.logwarn(f"[UR] Ungültiger Befehl: {direction}")
         return
 
-    # Orientierung bleibt gleich
+    # Behalte Orientierung bei
     q = quaternion_from_euler(0, 0, 0)
-    pose_target.orientation.x = q[0]
-    pose_target.orientation.y = q[1]
-    pose_target.orientation.z = q[2]
-    pose_target.orientation.w = q[3]
+    pose.orientation.x = q[0]
+    pose.orientation.y = q[1]
+    pose.orientation.z = q[2]
+    pose.orientation.w = q[3]
 
-    waypoints.append(pose_target)
+    waypoints.append(pose)
 
     plan, fraction = group.compute_cartesian_path(
         waypoints,
-        eef_step=0.01,
-        jump_threshold=0.0,
-        avoid_collisions=False
+        0.01,  # eef_step
+        0.0    # jump_threshold
     )
 
-    if fraction < 0.9:
-        rospy.logwarn("[UR] IK fehlgeschlagen für '%s'. Nur %f erreicht.", direction, fraction)
+    rospy.loginfo(f"[UR] Pfad geplant mit Fraktion: {fraction:.2f}")
+
+    if fraction < 0.5:
+        rospy.logwarn("[UR] Bewegung nicht möglich, Pfad unvollständig.")
     else:
-        group.execute(plan, wait=True)
-        rospy.loginfo("[UR] Bewegung in Richtung '%s' ausgeführt.", direction)
+        success = group.execute(plan, wait=True)
+        rospy.loginfo(f"[UR] Bewegung ausgeführt: {success}")
 
 def callback(msg):
     if msg.data == "stop":
         group.stop()
-        rospy.loginfo("Bewegung gestoppt.")
+        rospy.loginfo("[UR] Bewegung gestoppt.")
     else:
         move_tcp(msg.data)
 
@@ -61,10 +62,11 @@ if __name__ == '__main__':
 
     robot = moveit_commander.RobotCommander()
     scene = moveit_commander.PlanningSceneInterface()
-    group_name = "sixaxis"  # Achtung: Muss zur move_group passen
-    group = moveit_commander.MoveGroupCommander(group_name)
+    group = moveit_commander.MoveGroupCommander("sixaxis")
 
-    rospy.loginfo("Ready to take commands for planning group %s.", group_name)
+    group.set_max_velocity_scaling_factor(0.1)
+    group.set_max_acceleration_scaling_factor(0.1)
+
     rospy.Subscriber("/robot_control_topic", String, callback)
-    rospy.loginfo("UR Listener bereit.")
+    rospy.loginfo("[UR] Steuerung bereit für Planungsgruppe 'sixaxis'")
     rospy.spin()
