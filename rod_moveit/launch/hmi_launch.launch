@@ -4,6 +4,8 @@
     <include file="$(find rod_moveit)/launch/moveit_rviz.launch" >
         <arg name="rviz_config" value="$(find rod_moveit)/launch/moveit.rviz"/>
     </include>
-
-    <node pkg="rod_moveit" type="pose_trying.py" name="pose_trying_node" output="screen" />
+<!--
+    <node pkg="rod_moveit" type="control_listener_ur.py" name="control_listener_ur_node" output="screen" />
+    <node pkg="rod_moveit" type="hmi.py" name="hmi_node" output="screen" />#
+    -->
 </launch>
