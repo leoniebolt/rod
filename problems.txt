@@ -1,0 +1,47 @@
+Problem 1:
+in rviz nach roslaunch demo_gazebo.launch:
+planning group: pillar
+start state: current
+goal state: pillar_home
+
+plan & execute
+
+in gazebo: pillar fährt bei vermehrten Versuchen immer wo anders hin, aber nicht in seine home position
+
+Problem 2:
+rosrun rod_moveit demo_robots.py
+scara und pillar bewegen sich nicht bzw. nur manchmal
+sixaxis bewegt sich aber irgendwie
+
+Problem 3:
+nach rosrun rod_moveit demo_robots.py
+in Terminal wo roslaunch demo_gazebo.launch folgende Ausgabe:
+
+[ INFO] [1748264825.016987715, 1589.241000000]: Planning attempt 1 of at most 1
+[ INFO] [1748264825.019711215, 1589.244000000]: Planner configuration 'scara' will use planner 'geometric::RRT'. Additional configuration parameters will be set when the planner is constructed.
+[ INFO] [1748264825.020249415, 1589.244000000]: scara/scara: Starting planning with 1 states already in datastructure
+[ INFO] [1748264830.020169425, 1594.048000000]: scara/scara: Created 23345 states
+[ INFO] [1748264830.020301425, 1594.048000000]: No solution found after 5.000231 seconds
+[ WARN] [1748264830.020434125, 1594.048000000]: Timed out
+[ INFO] [1748264833.041400059, 1596.989000000]: Unable to solve the planning problem
+[ INFO] [1748264833.043396559, 1596.992000000]: Received event 'stop'
+[ INFO] [1748264833.053550159, 1597.001000000]: Combined planning and execution request received for MoveGroup action. Forwarding to planning and execution pipeline.
+[ INFO] [1748264833.053695859, 1597.001000000]: Planning attempt 1 of at most 1
+[ INFO] [1748264833.056981360, 1597.005000000]: Planner configuration 'pillar' will use planner 'geometric::RRT'. Additional configuration parameters will be set when the planner is constructed.
+[ INFO] [1748264833.057418660, 1597.005000000]: pillar/pillar: Starting planning with 1 states already in datastructure
+[ INFO] [1748264838.057714826, 1601.590000000]: pillar/pillar: Created 9219 states
+[ INFO] [1748264838.057850026, 1601.590000000]: No solution found after 5.000591 seconds
+[ WARN] [1748264838.057924826, 1601.590000000]: Timed out
+[ INFO] [1748264841.069723820, 1604.541000000]: Unable to solve the planning problem
+[ INFO] [1748264841.071543620, 1604.543000000]: Received event 'stop'
+[ INFO] [1748264841.090261120, 1604.561000000]: Combined planning and execution request received for MoveGroup action. Forwarding to planning and execution pipeline.
+[ INFO] [1748264841.090430020, 1604.561000000]: Planning attempt 1 of at most 1
+[ INFO] [1748264841.093856720, 1604.564000000]: Planner configuration 'sixaxis' will use planner 'geometric::RRT'. Additional configuration parameters will be set when the planner is constructed.
+[ INFO] [1748264841.094253620, 1604.565000000]: sixaxis/sixaxis: Starting planning with 1 states already in datastructure
+[ INFO] [1748264842.126174415, 1605.568000000]: sixaxis/sixaxis: Created 1218 states
+[ INFO] [1748264842.126404115, 1605.568000000]: Solution found in 1.032282 seconds
+[ INFO] [1748264846.123817894, 1609.499000000]: SimpleSetup: Path simplification took 0.008137 seconds and changed from 6 to 2 states
+[ WARN] [1748264850.118345604, 1613.370000000]: Controller '/sixaxis_controller' failed with error GOAL_TOLERANCE_VIOLATED: saj2 goal error 0.003076
+[ WARN] [1748264850.118765204, 1613.370000000]: Controller handle /sixaxis_controller reports status ABORTED
+[ INFO] [1748264850.118899804, 1613.370000000]: Completed trajectory execution with status ABORTED ...
+[ INFO] [1748264850.121623304, 1613.372000000]: Received event 'stop'

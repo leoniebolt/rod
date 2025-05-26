@@ -383,7 +383,7 @@
         <parent link="sixaxis_j5" />
         <child link="sixaxis_j6" />
         <axis xyz="0 0 1" />
-        <limit lower="-7" upper="7" effort="10" velocity="9.8" />
+        <limit lower="-3.2" upper="3.2" effort="10" velocity="9.8" />
         <dynamics damping="10" friction="0.1" />
     </joint>
     <link name="pillar_basejoint">
