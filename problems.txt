@@ -45,3 +45,13 @@ in Terminal wo roslaunch demo_gazebo.launch folgende Ausgabe:
 [ WARN] [1748264850.118765204, 1613.370000000]: Controller handle /sixaxis_controller reports status ABORTED
 [ INFO] [1748264850.118899804, 1613.370000000]: Completed trajectory execution with status ABORTED ...
 [ INFO] [1748264850.121623304, 1613.372000000]: Received event 'stop'
+
+Problem 4:
+auch wenn man in rviz die roboter in ihre home pose bringen will mit 
+Goal State: sixaxis_home, etc.
+
+bewegen sie sich irgendwie außer in die homepose
+
+
+Lösung?
+Entweder es stimmt was mit den controllern oder den tolerances nicht
