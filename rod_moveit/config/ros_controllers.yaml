@@ -1,3 +1,31 @@
+scara_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - sj1
+    - sj2
+    - sj3
+    - sEE
+  gains:
+    sj1:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    sj2:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    sj3:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    sEE:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
 sixaxis_controller:
   type: position_controllers/JointTrajectoryController
   joints:
@@ -38,76 +66,31 @@ sixaxis_controller:
       d: 1
       i: 1
       i_clamp: 1
-scara_controller:
+pillar_controller:
   type: position_controllers/JointTrajectoryController
   joints:
-    - sj1
-    - sj2
-    - sj3
-    - sjEE
+    - pj1
+    - pj2
+    - pj3
+    - pj4
   gains:
-    sj1:
+    pj1:
       p: 100
       d: 1
       i: 1
       i_clamp: 1
-    sj2:
+    pj2:
       p: 100
       d: 1
       i: 1
       i_clamp: 1
-    sj3:
+    pj3:
       p: 100
       d: 1
       i: 1
       i_clamp: 1
-    sjEE:
+    pj4:
       p: 100
       d: 1
       i: 1
       i_clamp: 1
-
-  constraints:
-    goal_time: 0.1
-    stopped_velocity_tolerance: 0.1
-    saj1:
-      goal: 0.1
-      trajectory: 0.05
-    saj2:
-      goal: 0.1
-      trajectory: 0.05
-    saj3:
-      goal: 0.1
-      trajectory: 0.05
-    saj4:
-      goal: 0.1
-      trajectory: 0.05
-    saj5:
-      goal: 0.1
-      trajectory: 0.05
-    saj6:
-      goal: 0.1
-      trajectory: 0.05
-    sj1:
-      goal: 0.1
-      trajectory: 0.05
-    sj2:
-      goal: 0.1
-      trajectory: 0.05
-    sj3:
-      goal: 0.1
-      trajectory: 0.05
-    sajEE:
-      goal: 0.1
-      trajectory: 0.05
-
-  constraints:
-    goal_time: 1.0
-    stopped_velocity_tolerance: 0.01
-    saj1: {trajectory: 0.1, goal: 0.01}
-    saj2: {trajectory: 0.1, goal: 0.01}
-    saj3: {trajectory: 0.1, goal: 0.01}
-    saj4: {trajectory: 0.1, goal: 0.01}
-    saj5: {trajectory: 0.1, goal: 0.01}
-    saj6: {trajectory: 0.1, goal: 0.01}
-

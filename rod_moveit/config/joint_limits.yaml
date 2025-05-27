@@ -8,6 +8,31 @@ default_acceleration_scaling_factor: 0.1
 # Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
 # Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
 joint_limits:
+  pj1:
+    has_velocity_limits: true
+    max_velocity: 4
+    has_acceleration_limits: false
+    max_acceleration: 0
+  pj2:
+    has_velocity_limits: true
+    max_velocity: 9
+    has_acceleration_limits: false
+    max_acceleration: 0
+  pj3:
+    has_velocity_limits: true
+    max_velocity: 9
+    has_acceleration_limits: false
+    max_acceleration: 0
+  pj4:
+    has_velocity_limits: true
+    max_velocity: 9
+    has_acceleration_limits: false
+    max_acceleration: 0
+  sEE:
+    has_velocity_limits: true
+    max_velocity: 42
+    has_acceleration_limits: false
+    max_acceleration: 0
   saj1:
     has_velocity_limits: true
     max_velocity: 8
@@ -15,7 +40,7 @@ joint_limits:
     max_acceleration: 0
   saj2:
     has_velocity_limits: true
-    max_velocity: 6
+    max_velocity: 7
     has_acceleration_limits: false
     max_acceleration: 0
   saj3:
@@ -35,7 +60,7 @@ joint_limits:
     max_acceleration: 0
   saj6:
     has_velocity_limits: true
-    max_velocity: 13
+    max_velocity: 10
     has_acceleration_limits: false
     max_acceleration: 0
   sj1:
@@ -45,16 +70,11 @@ joint_limits:
     max_acceleration: 0
   sj2:
     has_velocity_limits: true
-    max_velocity: 10
+    max_velocity: 8
     has_acceleration_limits: false
     max_acceleration: 0
   sj3:
     has_velocity_limits: true
     max_velocity: 2
-    has_acceleration_limits: false
-    max_acceleration: 0
-  sjEE:
-    has_velocity_limits: true
-    max_velocity: 42
     has_acceleration_limits: false
     max_acceleration: 0
