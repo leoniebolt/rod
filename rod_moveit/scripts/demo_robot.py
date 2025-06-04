@@ -61,40 +61,41 @@ class DemoRobot:
     def move_to_pose(self, pose, label=""):
         print(f"[{self.groupname}] Bewege zu Pose: {label}")
         self.move_group.set_pose_target(pose)
-        success = self.move_group.go(wait=True)
-        if not success:
-            print(f"[{self.groupname}] Bewegung zu {label} fehlgeschlagen!")
+        success, plan, _, _ = self.move_group.plan()
+        if success:
+            exec_success = self.move_group.execute(plan, wait=True)
+            if exec_success:
+                print(f"[{self.groupname}] Erfolg!")
+            else:
+                print(f"[{self.groupname}] Ausführung fehlgeschlagen!")
         else:
-            print(f"[{self.groupname}] Erfolg!")
+            print(f"[{self.groupname}] Planung fehlgeschlagen!")
         self.move_group.stop()
         self.move_group.clear_pose_targets()
-
 
     # Funktion um Gelenkwerte zu setzen
     def set_joint_target(self, joint_values):
         self.joint_goals.append(joint_values)
 
-    # Funktion um Roboter zu bewegen
     def move(self):
-        self.move_group.clear_pose_targets()
-        try:
-            for g in self.goals:
-                self.move_group.set_pose_target(g)
-                self.move_group.go(wait=True)
-            for joints in self.joint_goals:
-                print(f"[{self.groupname}] Moving to joint target: {joints}")
-                self.move_group.set_joint_value_target(joints)
-                self.move_group.go(wait=True)
-                self.move_group.stop()
-        except:
-            print("Targets not reachable")
-        finally:
-            print("Stopping")
-            self.move_group.stop()
             self.move_group.clear_pose_targets()
-            self.goals = []
-            self.joint_goals = []
-
+            try:
+                for g in self.goals:
+                    self.move_group.set_pose_target(g)
+                    self.move_group.go(wait=True)
+                for joints in self.joint_goals:
+                    print(f"[{self.groupname}] Moving to joint target: {joints}")
+                    self.move_group.set_joint_value_target(joints)
+                    self.move_group.go(wait=True)
+                    self.move_group.stop()
+            except:
+                print("Targets not reachable")
+            finally:
+                print("Stopping")
+                self.move_group.stop()
+                self.move_group.clear_pose_targets()
+                self.goals = []
+                self.joint_goals = []
             
 if __name__ == "__main__":
 
@@ -121,16 +122,16 @@ if __name__ == "__main__":
             # Joint (rad) = [1.572, 1.036, 0.091, 0.0]
         ),
         "s_above_place": geometry_msgs.msg.Pose(
-            position=geometry_msgs.msg.Point(x=2.397, y=-1.085, z=1.233),
-            orientation=geometry_msgs.msg.Quaternion(x=-0.964, y=-0.264, z=-0.000, w=0.000)
-            # Joint (grad) [-90, -60, 0.009, 1]
-            # Joint (rad) [-1.57, -1.044, 0.009, 0.018]
+            position=geometry_msgs.msg.Point(x=6.514, y=-1.559, z=1.224),
+            orientation=geometry_msgs.msg.Quaternion(x=-0.999, y=-0.044, z=0.000, w=0.000)
+            # Joint (grad) [-114, -79, 0, 313]
+            # Joint (rad) [-1.992, -1.381, 0, 5.456]
         ),
         "s_place": geometry_msgs.msg.Pose(
             position=geometry_msgs.msg.Point(x=2.397, y=-1.085, z=1.137),
             orientation=geometry_msgs.msg.Quaternion(x=-0.964, y=-0.264, z=-0.000, w=0.000)
-            # Joint (grad) [-90, -60, 0.091, 1]
-            # Joint (rad) [-1.57, -1.044, 0.091, 0.018]
+            # Joint (grad) [-114, -79, 0.91, 313]
+            # Joint (rad) [-1.992, -1.381, 0.91, 5.456]
         )
     }
 
@@ -140,32 +141,32 @@ if __name__ == "__main__":
         "pillar_home":geometry_msgs.msg.Pose(
             position=geometry_msgs.msg.Point(x=4.545, y=-1.745, z=1.505),
             orientation=geometry_msgs.msg.Quaternion(x=0.707, y=-0.025, z=-0.025, w=0.707)
-            # Joint (grad) = [0, 0, 0, 0, 0, 0]
-            # Joint (grad) = [0, 0, 0, 0, 0, 0]
+            # Joint (grad) = [0, 0, 0, 0]
+            # Joint (rad) = [0, 0, 0, 0]
         ),
         "pi_above_pick_up":geometry_msgs.msg.Pose(
-            position=geometry_msgs.msg.Point(x=-0.867, y=-1.121, z=1.591),
-            orientation=geometry_msgs.msg.Quaternion(x=0.703, y=-0.001, z=0.712, w=0.000)
-            # Joint (grad) = [0, 0, 0, 0, 0, 0]
-            # Joint (grad) = [0, 0, 0, 0, 0, 0]
+            position=geometry_msgs.msg.Point(x=5.430, y=-2.009, z=1.333),
+            orientation=geometry_msgs.msg.Quaternion(x=0.497, y=-0.503, z=-0.503, w=0.497)
+            # Joint (grad) = [-0.213, -132, 25, 20]
+            # Joint (rad) = [-0.213, -2.299, 0.434, 0.353]
         ),
         "pi_pick_up":geometry_msgs.msg.Pose(
-            position=geometry_msgs.msg.Point(x=-0.867, y=-1.121, z=1.591),
-            orientation=geometry_msgs.msg.Quaternion(x=0.703, y=-0.001, z=0.712, w=0.000)
-            # Joint (grad) = [0, 0, 0, 0, 0, 0]
-            # Joint (grad) = [0, 0, 0, 0, 0, 0]
+            position=geometry_msgs.msg.Point(x=5.430, y=-2.009, z=1.072),
+            orientation=geometry_msgs.msg.Quaternion(x=0.497, y=-0.503, z=-0.503, w=0.497)
+            # Joint (grad) = [-0.417, -132, 25, 20]
+            # Joint (rad) = [-0.417, -2.299, 0.434, 0.353]
         ),
         "pi_above_place_up":geometry_msgs.msg.Pose(
-            position=geometry_msgs.msg.Point(x=-0.867, y=-1.121, z=1.591),
-            orientation=geometry_msgs.msg.Quaternion(x=0.703, y=-0.001, z=0.712, w=0.000)
-            # Joint (grad) = [0, 0, 0, 0, 0, 0]
-            # Joint (grad) = [0, 0, 0, 0, 0, 0]
+            position=geometry_msgs.msg.Point(x=4.855, y=-1.524, z=1.353),
+            orientation=geometry_msgs.msg.Quaternion(x=0.707, y=0.014, z=0.014, w=0.707)
+            # Joint (grad) = [-0.193, -102, 135, -27]
+            # Joint (rad) = [-0.193, -1.783, 2.359, -0.467]
         ),
         "pi_place_up":geometry_msgs.msg.Pose(
-            position=geometry_msgs.msg.Point(x=-0.867, y=-1.121, z=1.591),
-            orientation=geometry_msgs.msg.Quaternion(x=0.703, y=-0.001, z=0.712, w=0.000)
-            # Joint (grad) = [0, 0, 0, 0, 0, 0]
-            # Joint (grad) = [0, 0, 0, 0, 0, 0]
+            position=geometry_msgs.msg.Point(x=4.855, y=-1.524, z=1.204),
+            orientation=geometry_msgs.msg.Quaternion(x=0.707, y=0.014, z=0.014, w=0.707)
+            # Joint (grad) = [-0.342, -102, 135, -27]
+            # Joint (rad) = [-0.342, -1.783, 2.359, -0.467]
         ),
     }
 
@@ -192,10 +193,10 @@ if __name__ == "__main__":
             # Joint (rad) = [0.0524, 0.6283, 0.4014, 0.0, -1.3439, 0.0524]
         ),
         "sa_above_place": geometry_msgs.msg.Pose(
-            position=geometry_msgs.msg.Point(x=-2.425, y=-1.040, z=1.067),
-            orientation=geometry_msgs.msg.Quaternion(x=-0.715, y=-0.699, z=0.004, w=0.012)
-            # Joint (grad) = [173, -4, -27, 0, -66, -7]
-            # Joint (rad) = [3.0194, -0.0698, -0.4712, 0.0, -1.1519, -0.1222]
+            position=geometry_msgs.msg.Point(x=1.256, y=-1.563, z=0.536),
+            orientation=geometry_msgs.msg.Quaternion(x=0.001, y=1.000, z=0.002, w=0.010)
+            # Joint (grad) = [180, 60, -5, 0, -27, 0]
+            # Joint (rad) = [3.134, 1.051, -0.085, -0.008, -0.472, -0.001]
         ),
         "sa_place": geometry_msgs.msg.Pose(
             position=geometry_msgs.msg.Point(x=-2.771, y=-1.029, z=0.421),
@@ -206,30 +207,122 @@ if __name__ == "__main__":
     }
 
     # initialize robot instances
-    scara = DemoRobot(groupname="scara")    
-    sixaxis = DemoRobot(groupname="sixaxis")
-    pillar = DemoRobot(groupname="pillar")
+    scara = DemoRobot(groupname="scara_group")    
+    sixaxis = DemoRobot(groupname="sixaxis_group")
+    pillar = DemoRobot(groupname="pillar_group")
 
 
     # testing
-    print("scara pose:\n")
-    scara.get_current_pose()
-    print("\n. \n. \n. \n")
+    #print("scara pose:\n")
+    #scara.get_current_pose()
+    #print("\n. \n. \n. \n")
 
-    print("pillar pose:\n")
-    pillar.get_current_pose()
-    print("\n. \n. \n. \n")
+    #print("pillar pose:\n")
+    #pillar.get_current_pose()
+    #print("\n. \n. \n. \n")
 
-    print("sixaxis pose:\n")
-    sixaxis.get_current_pose()
-    print("\n. \n. \n. \n")
-
-
-    scara.move_to_pose(s_poses["scara_home"], "scara home")
-    pillar.move_to_pose(pi_poses["pillar_home"], "Pillar home")
-    sixaxis.move_to_pose(sa_poses["sixaxis_home"], "sixaxis home")
+    #print("sixaxis pose:\n")
+    #sixaxis.get_current_pose()
+    #print("\n. \n. \n. \n")
+    while True:
+       # SCARA
+       # above pick up
+       scara.set_joint_target([1.572, 1.036, 0, 0.0])
+       scara.move()
+       # pick up
+       scara.set_joint_target([1.572, 1.036, 0.091, 0.0])
+       scara.move()
+       # above pick up
+       scara.set_joint_target([1.572, 1.036, 0, 0.0])
+       scara.move()
+       # above place
+       scara.set_joint_target([-1.57, -1.044, 0.009, 0.018])
+       scara.move()
+       # place
+       scara.set_joint_target([-1.57, -1.044, 0.091, 0.018])
+       scara.move()
+       # above place
+       scara.set_joint_target([-1.57, -1.044, 0.009, 0.018])
+       scara.move()
+       # home
+       scara.set_joint_target([0, 0, 0, 0.0])
+       scara.move()
+    # PILLER
+       # above pick
+       pillar.set_joint_target([-0.213, -2.299, 0.434, 0.353])
+       pillar.move()
+       # pick
+       pillar.set_joint_target([-0.417, -2.299, 0.434, 0.353])
+       pillar.move()
+       # above pick
+       pillar.set_joint_target([-0.213, -2.299, 0.434, 0.353])
+       pillar.move()
+       # above place
+       pillar.set_joint_target([-0.193, -1.783, 2.359, -0.467])
+       pillar.move()
+       # place
+       pillar.set_joint_target([-0.342, -1.783, 2.359, -0.467])
+       pillar.move()
+       # above place
+       pillar.set_joint_target([-0.193, -1.783, 2.359, -0.467])
+       pillar.move()
+       # home
+       pillar.set_joint_target([0, 0, 0, 0])
+       pillar.move()
+    # SIXAXIS
+       # above pick
+       sixaxis.set_joint_target([0.0873, 0.6632, 0.9948, 0.0, -1.850, 0.0698])
+       sixaxis.move()
+       # pick
+       sixaxis.set_joint_target([0.0524, 0.6283, 0.4014, 0.0, -1.3439, 0.0524])
+       sixaxis.move()
+       # above pick
+       sixaxis.set_joint_target([0.0873, 0.6632, 0.9948, 0.0, -1.850, 0.0698])
+       sixaxis.move()
+       # above place
+       sixaxis.set_joint_target([3.0194, -0.0698, -0.4712, 0.0, -1.1519, -0.1222])
+       sixaxis.move()
+       # place
+       sixaxis.set_joint_target([3.129, 0.963, -0.204, 0.007, -0.400, -0.085])
+       sixaxis.move()
+       # above place
+       sixaxis.set_joint_target([3.0194, -0.0698, -0.4712, 0.0, -1.1519, -0.1222])
+       sixaxis.move()
+       # home
+       sixaxis.set_joint_target([0, 0, 0, 0, 0, 0])
+       sixaxis.move()
+     
+    #scara.move_to_pose(s_poses["scara_home"], "scara home")
+    #pillar.move_to_pose(pi_poses["pillar_home"], "Pillar home")
+    #sixaxis.move_to_pose(sa_poses["sixaxis_home"], "sixaxis home")
 
 """
+    # Funktion um Roboter zu bewegen
+    def move(self):
+        self.move_group.clear_pose_targets()
+        try:
+            for g in self.goals:
+                self.move_group.set_pose_target(g)
+                self.move_group.go(wait=True)
+            for joints in self.joint_goals:
+                print(f"[{self.groupname}] Moving to joint target: {joints}")
+                self.move_group.set_joint_value_target(joints)
+                self.move_group.go(wait=True)
+                self.move_group.stop()
+        except:
+            print("Targets not reachable")
+        finally:
+            print("Stopping")
+            self.move_group.stop()
+            self.move_group.clear_pose_targets()
+            self.goals = []
+            self.joint_goals = []
+
+
+    # Funktion um Gelenkwerte zu setzen
+    def set_joint_target(self, joint_values):
+        self.joint_goals.append(joint_values)
+
     try:
         while True:
             print("\n--- Starting new cycle ---\n")

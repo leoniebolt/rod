@@ -3,11 +3,14 @@
      Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot name="rod">
-    <link name="world" />
-    <joint name="fixed_link_to_world" type="fixed">
-        <parent link="world" />
-        <child link="base_link" />
+
+    <link name="world">
+    </link>
+    <joint name="FixedLinkToWorld" type="fixed">
+        <parent link="world"/>
+        <child link="base_link"/>
     </joint>
+
     <link name="base_link">
         <inertial>
             <origin xyz="-6.83047368665868E-18 0.025 1.94478764689587E-18" rpy="0 0 0" />
@@ -85,8 +88,8 @@
         <parent link="scara_basejoint" />
         <child link="scara_j1" />
         <axis xyz="0 0 1" />
-        <limit lower="-2.7" upper="2.7" effort="10" velocity="9.2" />
-        <dynamics damping="10" friction="0.1" />
+        <limit lower="-2.7" upper="2.7" effort="1000" velocity="9.2" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="scara_j2">
         <inertial>
@@ -115,8 +118,8 @@
         <parent link="scara_j1" />
         <child link="scara_j2" />
         <axis xyz="0 0 1" />
-        <limit lower="-2.7" upper="2.7" effort="10" velocity="7.9" />
-        <dynamics damping="10" friction="0.1" />
+        <limit lower="-2.7" upper="2.7" effort="1000" velocity="7.9" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="scara_j3">
         <inertial>
@@ -145,8 +148,8 @@
         <parent link="scara_j2" />
         <child link="scara_j3" />
         <axis xyz="0 0 1" />
-        <limit lower="0" upper="0.32" effort="10" velocity="2" />
-        <dynamics damping="10" friction="0.1" />
+        <limit lower="0" upper="0.32" effort="1000" velocity="2" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="scara_jEE">
         <inertial>
@@ -175,8 +178,8 @@
         <parent link="scara_j3" />
         <child link="scara_jEE" />
         <axis xyz="0 0 1" />
-        <limit lower="-6.2" upper="6.2" effort="10" velocity="41.9" />
-        <dynamics damping="10" friction="0.1" />
+        <limit lower="-6.2" upper="6.2" effort="1000" velocity="41.9" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="sixaxis_joint">
         <inertial>
@@ -233,8 +236,8 @@
         <parent link="sixaxis_joint" />
         <child link="sixaxis_j1" />
         <axis xyz="0 0 1" />
-        <limit lower="-4.3" upper="4.3" effort="10" velocity="8" />
-        <dynamics damping="10" friction="0.1" />
+        <limit lower="-4.3" upper="4.3" effort="1000" velocity="8" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="sixaxis_j2">
         <inertial>
@@ -263,8 +266,8 @@
         <parent link="sixaxis_j1" />
         <child link="sixaxis_j2" />
         <axis xyz="0 0 1" />
-        <limit lower="-2" upper="2" effort="10" velocity="6.6" />
-        <dynamics damping="10" friction="0.1" />
+        <limit lower="-2" upper="2" effort="1000" velocity="6.6" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="sixaxis_j3">
         <inertial>
@@ -293,8 +296,8 @@
         <parent link="sixaxis_j2" />
         <child link="sixaxis_j3" />
         <axis xyz="0 0 1" />
-        <limit lower="-3.6" upper="1" effort="10" velocity="4.9" />
-        <dynamics damping="10" friction="0.1" />
+        <limit lower="-3.6" upper="1" effort="1000" velocity="4.9" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="sixaxis_j4">
         <inertial>
@@ -323,8 +326,8 @@
         <parent link="sixaxis_j3" />
         <child link="sixaxis_j4" />
         <axis xyz="0 0 1" />
-        <limit lower="-4" upper="4" effort="10" velocity="9.8" />
-        <dynamics damping="10" friction="0.1" />
+        <limit lower="-4" upper="4" effort="1000" velocity="9.8" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="sixaxis_j5">
         <inertial>
@@ -353,14 +356,15 @@
         <parent link="sixaxis_j4" />
         <child link="sixaxis_j5" />
         <axis xyz="0 0 1" />
-        <limit lower="-2.2" upper="2.1" effort="10" velocity="7.3" />
-        <dynamics damping="10" friction="0.1" />
+        <limit lower="-2.2" upper="2.1" effort="1000" velocity="7.3" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="sixaxis_j6">
         <inertial>
-            <origin xyz="6.02154166495783E-05 4.02968654544811E-05 0.0292969177312066" rpy="0 0 0" />
-            <mass value="1.14880650871049" />
-            <inertia ixx="0.00255489983767874" ixy="2.41983385261863E-07" ixz="-2.29897197591324E-06" iyy="0.00760875550673298" iyz="-1.24792345175244E-06" izz="0.00920851979414176" />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <!--origin xyz="3.67695280600877E-05 -8.68196754817419E-05 0.00422499423987288" rpy="0 0 0" /-->
+            <mass value="1.25901265956962" />
+            <inertia ixx="0.00763229876196467" ixy="-2.41983385209045E-07" ixz="-1.24792345176845E-06" iyy="0.00257844309291035" iyz="2.29897197600597E-06" izz="0.00924550487938007" />
         </inertial>
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0" />
@@ -368,7 +372,7 @@
                 <mesh filename="package://rod/meshes/sixaxis_j6.STL" />
             </geometry>
             <material name="">
-                <color rgba="1 1 1 1" />
+                <color rgba="0.298039215686275 0.298039215686275 0.298039215686275 1" />
             </material>
         </visual>
         <collision>
@@ -379,12 +383,12 @@
         </collision>
     </link>
     <joint name="saj6" type="revolute">
-        <origin xyz="-0.027996 -0.12051 0" rpy="-1.5708 1.5535 -3.1416" />
+        <origin xyz="0 -0.151 0" rpy="1.5708 0 0" />
         <parent link="sixaxis_j5" />
         <child link="sixaxis_j6" />
-        <axis xyz="0 0 1" />
-        <limit lower="-3.2" upper="3.2" effort="10" velocity="9.8" />
-        <dynamics damping="10" friction="0.1" />
+        <axis xyz="0 0 -1" />
+        <limit lower="-7" upper="7" effort="1000" velocity="9.8" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="pillar_basejoint">
         <inertial>
@@ -441,8 +445,8 @@
         <parent link="pillar_basejoint" />
         <child link="pillar_j1" />
         <axis xyz="0 1 0" />
-        <limit lower="-1.5" upper="0" effort="10" velocity="4" />
-        <dynamics damping="10" friction="0.1" />
+        <limit lower="-1.5" upper="0" effort="10000" velocity="4" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="pillar_j2">
         <inertial>
@@ -471,8 +475,8 @@
         <parent link="pillar_j1" />
         <child link="pillar_j2" />
         <axis xyz="0 1 0" />
-        <limit lower="-2.3" upper="2.3" effort="10" velocity="9" />
-        <dynamics damping="10" friction="0.1" />
+        <limit lower="-2.3" upper="2.3" effort="1000" velocity="9" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="pillar_j3">
         <inertial>
@@ -501,8 +505,8 @@
         <parent link="pillar_j2" />
         <child link="pillar_j3" />
         <axis xyz="0 1 0" />
-        <limit lower="-2.6" upper="2.6" effort="10" velocity="9" />
-        <dynamics damping="10" friction="0.1" />
+        <limit lower="-2.6" upper="2.6" effort="1000" velocity="9" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="pillar_j4">
         <inertial>
@@ -531,8 +535,8 @@
         <parent link="pillar_j3" />
         <child link="pillar_j4" />
         <axis xyz="0 1 0" />
-        <limit lower="-7" upper="7" effort="10" velocity="8.4" />
-        <dynamics damping="10" friction="0.1" />
+        <limit lower="-7" upper="7" effort="1000" velocity="8.4" />
+        <dynamics damping="0.05" friction="0.1" />
     </joint>
     <link name="conveyor1_joint">
         <inertial>
@@ -817,6 +821,12 @@
     <gazebo>
         <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
             <robotNamespace>/</robotNamespace>
+        </plugin>
+    </gazebo>
+
+    <gazebo>
+        <plugin name = "joint_state_publisher" filename = "libgazebo_ros_joint_state_publisher.so" >
+		<jointName>sj1, sj2, sj3, sEE, saj1, saj2, saj3, saj4, saj5, saj6, pj1, pj2, pj3, pj4</jointName>
         </plugin>
     </gazebo>
 </robot>

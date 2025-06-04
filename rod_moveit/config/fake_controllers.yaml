@@ -1,12 +1,12 @@
 controller_list:
-  - name: fake_scara_controller
+  - name: fake_scara_group_controller
     type: $(arg fake_execution_type)
     joints:
       - sj1
       - sj2
       - sj3
       - sEE
-  - name: fake_sixaxis_controller
+  - name: fake_sixaxis_group_controller
     type: $(arg fake_execution_type)
     joints:
       - saj1
@@ -15,7 +15,7 @@ controller_list:
       - saj4
       - saj5
       - saj6
-  - name: fake_pillar_controller
+  - name: fake_pillar_group_controller
     type: $(arg fake_execution_type)
     joints:
       - pj1
@@ -23,9 +23,9 @@ controller_list:
       - pj3
       - pj4
 initial:  # Define initial robot poses per group
-  - group: scara
-    pose: scara_homepose
-  - group: sixaxis
-    pose: sixaxis_homepose
-  - group: pillar
-    pose: pillar_homepose
+  - group: scara_group
+    pose: scara_home
+  - group: sixaxis_group
+    pose: sixaxis_home
+  - group: pillar_group
+    pose: pillar_home

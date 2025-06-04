@@ -1,0 +1,9 @@
+<launch>
+    <include file="$(find rod)/launch/gazebo_description.launch" />
+    <include file="$(find rod_moveit)/launch/move_group.launch" />
+    <include file="$(find rod_moveit)/launch/moveit_rviz.launch" >
+        <arg name="rviz_config" value="$(find rod_moveit)/launch/moveit.rviz"/>
+    </include>
+
+    <!--<node pkg="rod_moveit" type="pose_trying.py" name="pose_trying_node" output="screen" />-->
+</launch>

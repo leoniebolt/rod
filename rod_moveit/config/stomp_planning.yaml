@@ -1,5 +1,5 @@
-stomp/scara:
-  group_name: scara
+stomp/scara_group:
+  group_name: scara_group
   optimization:
     num_timesteps: 60
     num_iterations: 40
@@ -37,8 +37,8 @@ stomp/scara:
         publish_intermediate: True
         marker_topic: stomp_trajectory
         marker_namespace: optimized
-stomp/sixaxis:
-  group_name: sixaxis
+stomp/sixaxis_group:
+  group_name: sixaxis_group
   optimization:
     num_timesteps: 60
     num_iterations: 40
@@ -76,8 +76,8 @@ stomp/sixaxis:
         publish_intermediate: True
         marker_topic: stomp_trajectory
         marker_namespace: optimized
-stomp/pillar:
-  group_name: pillar
+stomp/pillar_group:
+  group_name: pillar_group
   optimization:
     num_timesteps: 60
     num_iterations: 40
