@@ -10,14 +10,11 @@ install ubuntu 20.04.
 install ros noetic
 
 Specific Installations:
-install moveit
-
+sudo apt install ros-noetic-moveit
 sudo apt install ros-noetic-joint-trajectory-controller
+sudo apt install ros-noetic-ros-controllers*
+sudo apt install ros-noetic-moveit-ros-visualization
 sudo apt install ros-noetic-position-controllers
 sudo apt install ros-noetic-ros-control*
-
-
-sudo apt update
-sudo apt install ros-noetic-joint-trajectory-controller
-
 sudo apt install ros-noetic-moveit-commander
+
