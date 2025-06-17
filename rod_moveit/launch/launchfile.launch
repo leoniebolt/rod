@@ -5,5 +5,5 @@
         <arg name="rviz_config" value="$(find rod_moveit)/launch/moveit.rviz"/>
     </include>
 
-    <node pkg="rod_moveit" type="pose_trying.py" name="pose_trying_node" output="screen" />
+    <node pkg="rod_moveit" type="demo_robot.py" name="demo_robot_node" output="screen" />
 </launch>
