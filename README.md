@@ -22,8 +22,8 @@ sudo apt install ros-noetic-moveit-commander
 Download GitHub repository:
 
 ```bash
-git clone
-cd
+git clone https://github.com/leoniebolt/rod.git
+cd rod
 ```
 
 In workspace folder:
@@ -37,7 +37,8 @@ For launching the HMI:
 roslaunch rod_moveit hmi.launch
 ```
 
-Use the arrows to linearly move the sixaxis robot
+Use the arrows to linearly move the sixaxis robot.
+![image](https://github.com/user-attachments/assets/6df7e486-398f-464e-b476-8e3724ca9ff1)
 
 
 For launching the automatic program:
