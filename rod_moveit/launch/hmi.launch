@@ -1,0 +1,10 @@
+<launch>
+    <include file="$(find rod)/launch/gazebo_description.launch" />
+    <include file="$(find rod_moveit)/launch/move_group.launch" />
+    <include file="$(find rod_moveit)/launch/moveit_rviz.launch">
+        <arg name="rviz_config" value="$(find rod_moveit)/launch/moveit.rviz"/>
+    </include>
+    
+    <node pkg="rod_moveit" type="control_listener_sixaxis.py" name="control_listener_sixaxis_node" output="screen"/>
+    <node pkg="rod_moveit" type="hmi.py" name="hmi_node" output="screen"/>
+</launch>

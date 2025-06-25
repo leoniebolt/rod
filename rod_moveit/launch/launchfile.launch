@@ -1,0 +1,9 @@
+<launch>
+    <include file="$(find rod)/launch/gazebo_description.launch" />
+    <include file="$(find rod_moveit)/launch/move_group.launch" />
+    <include file="$(find rod_moveit)/launch/moveit_rviz.launch">
+        <arg name="rviz_config" value="$(find rod_moveit)/launch/moveit.rviz"/>
+    </include>
+
+    <node pkg="rod_moveit" type="demo_robot.py" name="demo_robot_node" output="screen"/>
+</launch>
