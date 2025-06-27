@@ -87,6 +87,6 @@ if __name__ == '__main__':
     
     ## Subscriber to control topic
     rospy.Subscriber('/sixaxis_control_topic', String, callback)
-    
+
     rospy.loginfo("SIXAXIS Listener bereit.")
     rospy.spin()
