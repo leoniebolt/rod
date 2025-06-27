@@ -28,7 +28,7 @@ class RobotHMI(QWidget):
      ## Initializes the Qt GUI layout and buttons.
     def initUI(self):
         self.setWindowTitle('Roboter HMI')
-
+        
         # Main layout
         layout = QVBoxLayout()
         self.setLayout(layout)
