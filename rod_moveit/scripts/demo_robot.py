@@ -14,9 +14,10 @@ from moveit_msgs.msg import MoveGroupAction
 
 class DemoRobot:
     def __init__(self, nodename="rod_node", groupname="rod_group"):
+        # Initializing ROS node
         rospy.init_node(nodename, anonymous=False)
 
-        # Warten bis move_group bereit ist
+        # Waiting for move_group to be ready
         self.wait_for_move_group()
 
         moveit_commander.roscpp_initialize(sys.argv)
@@ -24,62 +25,43 @@ class DemoRobot:
         self.move_group = moveit_commander.MoveGroupCommander(groupname)
 
         # Scaling Factors + Tolerances
-        self.move_group.set_max_acceleration_scaling_factor(0.1)
-        self.move_group.set_max_velocity_scaling_factor(0.1)
+        self.move_group.set_max_acceleration_scaling_factor(1.0)
+        self.move_group.set_max_velocity_scaling_factor(1.0)
 
         # Initialize self variables
         self.groupname = groupname
-        self.goals = []
         self.joint_goals = []
-        self.pose_goals = []
 
     def wait_for_move_group(self):
-        # warten bis der move_group ActionServer verfügbar ist
-        print("Warte auf move_group Action Server...")
+        # Waiting for move_group ActionServer to be available
+        print("Waiting for move_group Action Server...")
         client = actionlib.SimpleActionClient('move_group', MoveGroupAction)
         if not client.wait_for_server(rospy.Duration(10)):
-            print("move_group Action Server nicht erreichbar, warte länger...")
+            print("move_group Action Server not reachable, waiting longer...")
             while not client.wait_for_server(rospy.Duration(1)):
                 if rospy.is_shutdown():
-                    raise rospy.ROSInterruptException("ROS wurde beendet während gewartet wurde.")
+                    raise rospy.ROSInterruptException("ROS was ended while starting.")
                 print(".", end="", flush=True)
-        print("\nmove_group Action Server ist verfügbar!")
+        print("\nmove_group Action Server is available!")
 
-    # Funktion um aktuelle Pose zu bekommen
+    # Function to print current end-effector pose of robot group
     def get_current_pose(self):
         pose = self.move_group.get_current_pose().pose
-        print(f"[{self.groupname}] Aktuelle Pose:")
+        print(f"[{self.groupname}] Current Pose:")
         print(f"  Position: x={pose.position.x:.3f}, y={pose.position.y:.3f}, z={pose.position.z:.3f}")
-        print(f"  Orientierung: x={pose.orientation.x:.3f}, y={pose.orientation.y:.3f}, "
+        print(f"  Orientation: x={pose.orientation.x:.3f}, y={pose.orientation.y:.3f}, "
               f"z={pose.orientation.z:.3f}, w={pose.orientation.w:.3f}")
         return pose
 
-    # Funktion um zu gewünschter Pose zu fahren
-    def move_to_pose(self, pose, label=""):
-        print(f"[{self.groupname}] Bewege zu Pose: {label}")
-        self.move_group.set_pose_target(pose)
-        success, plan, _, _ = self.move_group.plan()
-        if success:
-            exec_success = self.move_group.execute(plan, wait=True)
-            if exec_success:
-                print(f"[{self.groupname}] Erfolg!")
-            else:
-                print(f"[{self.groupname}] Ausführung fehlgeschlagen!")
-        else:
-            print(f"[{self.groupname}] Planung fehlgeschlagen!")
-        self.move_group.stop()
-        self.move_group.clear_pose_targets()
-
-    # Funktion um Gelenkwerte zu setzen
+    # Function to set joint values of robot
     def set_joint_target(self, joint_values):
         self.joint_goals.append(joint_values)
 
+    # Execute all goals in self.goals (pose goals) and self.joint_goals (joint goals)
     def move(self):
-            self.move_group.clear_pose_targets()
+            self.move_group.clear_pose_targets()    # Clear any previous pose targets
             try:
-                for g in self.goals:
-                    self.move_group.set_pose_target(g)
-                    self.move_group.go(wait=True)
+                # Execute all joint goals
                 for joints in self.joint_goals:
                     print(f"[{self.groupname}] Moving to joint target: {joints}")
                     self.move_group.set_joint_value_target(joints)
@@ -88,17 +70,15 @@ class DemoRobot:
             except:
                 print("Targets not reachable")
             finally:
+                # Clean up: stop movement, clear targets and reset goal lists
                 print("Stopping")
                 self.move_group.stop()
-                self.move_group.clear_pose_targets()
-                self.goals = []
                 self.joint_goals = []
             
 if __name__ == "__main__":
 
-        # Poses for SCARA robot
+    # Poses for SCARA
     s_poses = {
-        # WERTE NICHT VERÄNDERN!!!!
         "scara_home": geometry_msgs.msg.Pose(
             position=geometry_msgs.msg.Point(x=7.012, y=-1.134, z=1.224),
             orientation=geometry_msgs.msg.Quaternion(x=0.998, y=-0.064, z=0.000, w=0.000)
@@ -132,9 +112,8 @@ if __name__ == "__main__":
         )
     }
 
-    # Poses for pillar
+    # Poses for Pillar
     pi_poses = {
-        # DO NOT CHANGE VALUES
         "pillar_home":geometry_msgs.msg.Pose(
             position=geometry_msgs.msg.Point(x=4.545, y=-1.745, z=1.505),
             orientation=geometry_msgs.msg.Quaternion(x=0.707, y=-0.025, z=-0.025, w=0.707)
@@ -168,9 +147,8 @@ if __name__ == "__main__":
     }
 
 
-    # Poses for SIXAXIS robot
+    # Poses for SIXAXIS
     sa_poses = {
-        # DO NOT CHANGE VALUES
         "sixaxis_home": geometry_msgs.msg.Pose(
             position=geometry_msgs.msg.Point(x=2.960, y=-1.567, z=1.542),
             orientation=geometry_msgs.msg.Quaternion(x=0.500, y=0.509, z=0.491, w=0.500)
@@ -203,7 +181,7 @@ if __name__ == "__main__":
         )
     }
 
-    # initialize robot instances
+    # Initializing robot instances
     scara = DemoRobot(groupname="scara_group")    
     sixaxis = DemoRobot(groupname="sixaxis_group")
     pillar = DemoRobot(groupname="pillar_group")
@@ -228,17 +206,17 @@ if __name__ == "__main__":
            if rospy.is_shutdown():
                 break
            # above place
-           scara.set_joint_target([-1.57, -1.044, 0.009, 0.018])
+           scara.set_joint_target([-1.9, -1.044, 0.009, 0.018])
            scara.move()
            if rospy.is_shutdown():
                 break
            # place
-           scara.set_joint_target([-1.57, -1.044, 0.091, 0.018])
+           scara.set_joint_target([-1.9, -1.044, 0.091, 0.018])
            scara.move()
            if rospy.is_shutdown():
                 break
            # above place
-           scara.set_joint_target([-1.57, -1.044, 0.009, 0.018])
+           scara.set_joint_target([-1.9, -1.044, 0.009, 0.018])
            scara.move()
            if rospy.is_shutdown():
                 break
@@ -319,14 +297,18 @@ if __name__ == "__main__":
            sixaxis.move()
            if rospy.is_shutdown():
                 break
+    
+    # Stopping via terminal with CTRL+C
     except KeyboardInterrupt:
-        print("\nStrg+C erkannt! Stoppe alle Roboter...")
+        print("\nStopping detected! Stopping all robots...")
         scara.move_group.stop()
         pillar.move_group.stop()
         sixaxis.move_group.stop()
-        print("Roboter gestoppt. Programm beendet.")
+        print("Robots stopped. Programme ended.")
+
+    # Cleaning up environment (stopping move_group + shutting down moveit_commander)
     finally:
-        print("Aufräumen und beenden.")
+        print("Clean and end.")
         scara.move_group.stop()
         pillar.move_group.stop()
         sixaxis.move_group.stop()
