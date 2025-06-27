@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+## @file demo_robot.py
+#  @brief automatic control of SCARA, PILLAR und SIXAXIS robots with MoveIt in ROS
+#  @author Bolt, Haier, Saifee
+#  @date 2025-06-27
+
 import sys
 import copy
 import rospy
@@ -13,27 +18,34 @@ from moveit_msgs.msg import MoveGroupAction
 
 
 class DemoRobot:
+    """
+    @brief Class to control a MoveIt robot group via ROS.
+    """
     def __init__(self, nodename="rod_node", groupname="rod_group"):
-        # Initializing ROS node
+        """
+        @brief Constructor that initializes the ROS node and MoveIt commander.
+
+        @param nodename Name of the ROS node to initialize.
+        @param groupname Name of the MoveIt planning group to control.
+        """
         rospy.init_node(nodename, anonymous=False)
 
-        # Waiting for move_group to be ready
         self.wait_for_move_group()
 
         moveit_commander.roscpp_initialize(sys.argv)
         self.robot = moveit_commander.RobotCommander()
         self.move_group = moveit_commander.MoveGroupCommander(groupname)
 
-        # Scaling Factors + Tolerances
         self.move_group.set_max_acceleration_scaling_factor(1.0)
         self.move_group.set_max_velocity_scaling_factor(1.0)
 
-        # Initialize self variables
         self.groupname = groupname
         self.joint_goals = []
 
     def wait_for_move_group(self):
-        # Waiting for move_group ActionServer to be available
+        """
+        @brief Waits until the MoveIt move_group action server is available.
+        """
         print("Waiting for move_group Action Server...")
         client = actionlib.SimpleActionClient('move_group', MoveGroupAction)
         if not client.wait_for_server(rospy.Duration(10)):
@@ -44,8 +56,13 @@ class DemoRobot:
                 print(".", end="", flush=True)
         print("\nmove_group Action Server is available!")
 
-    # Function to print current end-effector pose of robot group
+
     def get_current_pose(self):
+        """
+        @brief Prints and returns the current end-effector pose of the robot.
+
+        @return geometry_msgs.msg.Pose Current pose of the end-effector.
+        """
         pose = self.move_group.get_current_pose().pose
         print(f"[{self.groupname}] Current Pose:")
         print(f"  Position: x={pose.position.x:.3f}, y={pose.position.y:.3f}, z={pose.position.z:.3f}")
@@ -53,31 +70,49 @@ class DemoRobot:
               f"z={pose.orientation.z:.3f}, w={pose.orientation.w:.3f}")
         return pose
 
-    # Function to set joint values of robot
+
     def set_joint_target(self, joint_values):
+        """
+        @brief Adds a joint target to the goal queue.
+
+        @param joint_values List of joint values to move to.
+        """
         self.joint_goals.append(joint_values)
 
-    # Execute all goals in self.goals (pose goals) and self.joint_goals (joint goals)
     def move(self):
-            self.move_group.clear_pose_targets()    # Clear any previous pose targets
-            try:
-                # Execute all joint goals
-                for joints in self.joint_goals:
-                    print(f"[{self.groupname}] Moving to joint target: {joints}")
-                    self.move_group.set_joint_value_target(joints)
-                    self.move_group.go(wait=True)
-                    self.move_group.stop()
-            except:
-                print("Targets not reachable")
-            finally:
-                # Clean up: stop movement, clear targets and reset goal lists
-                print("Stopping")
+        """
+        @brief Executes all queued joint targets in sequence.
+        """
+        self.move_group.clear_pose_targets()    # Clear any previous pose targets
+        try:
+            for joints in self.joint_goals:
+                print(f"[{self.groupname}] Moving to joint target: {joints}")
+                self.move_group.set_joint_value_target(joints)
+                self.move_group.go(wait=True)
                 self.move_group.stop()
-                self.joint_goals = []
+        except:
+            print("Targets not reachable")
+        finally:
+            print("Stopping")
+            self.move_group.stop()
+            self.joint_goals = []
             
 if __name__ == "__main__":
 
-    # Poses for SCARA
+# Pose dictionaries for different robot groups follow below.
+# They are used to define task-relevant end-effector positions and orientations.
+
+# Each pose includes a geometry_msgs.msg.Pose consisting of:
+# - position: x, y, z in meters
+# - orientation: quaternion x, y, z, w
+# Comments also show corresponding joint angles in degrees and radians.
+
+
+    """
+    @brief Dictionary of predefined poses for the SCARA robot.
+    Each pose is used for specific tasks like pick-up and place actions.
+    """
+    # @var s_poses Dictionary of named poses for the SCARA robot.
     s_poses = {
         "scara_home": geometry_msgs.msg.Pose(
             position=geometry_msgs.msg.Point(x=7.012, y=-1.134, z=1.224),
@@ -112,7 +147,13 @@ if __name__ == "__main__":
         )
     }
 
-    # Poses for Pillar
+
+    
+    """
+    @brief Dictionary of predefined poses for the Pillar robot.
+    Each pose corresponds to a significant robot action location.
+    """
+    # @var pi_poses Dictionary of named poses for the Pillar robot.
     pi_poses = {
         "pillar_home":geometry_msgs.msg.Pose(
             position=geometry_msgs.msg.Point(x=4.545, y=-1.745, z=1.505),
@@ -147,7 +188,12 @@ if __name__ == "__main__":
     }
 
 
-    # Poses for SIXAXIS
+
+    """
+    @brief Dictionary of predefined poses for the Six-Axis robot.
+    Used for pick-and-place and initial position configuration.
+    """
+    # @var sa_poses Dictionary of named poses for the Six-Axis robot.
     sa_poses = {
         "sixaxis_home": geometry_msgs.msg.Pose(
             position=geometry_msgs.msg.Point(x=2.960, y=-1.567, z=1.542),
@@ -180,6 +226,10 @@ if __name__ == "__main__":
             # Joint (rad) = [3.129, 0.963, -0.204, 0.007, -0.400, -0.085]
         )
     }
+
+    """
+    @brief Main execution entry point. Initializes robot groups. Starts automatic procedure.
+    """
 
     # Initializing robot instances
     scara = DemoRobot(groupname="scara_group")    
@@ -298,7 +348,10 @@ if __name__ == "__main__":
            if rospy.is_shutdown():
                 break
     
-    # Stopping via terminal with CTRL+C
+
+        """
+        @brief Stopping via terminal with CTRL+C.
+        """
     except KeyboardInterrupt:
         print("\nStopping detected! Stopping all robots...")
         scara.move_group.stop()
@@ -306,7 +359,10 @@ if __name__ == "__main__":
         sixaxis.move_group.stop()
         print("Robots stopped. Programme ended.")
 
-    # Cleaning up environment (stopping move_group + shutting down moveit_commander)
+            
+        """
+        @brief Cleaning up environment (stopping move_group + shutting down moveit_commander)
+        """
     finally:
         print("Clean and end.")
         scara.move_group.stop()
