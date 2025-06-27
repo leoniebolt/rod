@@ -31,20 +31,18 @@ def move_tcp(direction):
     # target_pose.position = current_pose.position
 
     ## Set linear movement along one axis
-    if direction == "up":
-        target_pose.position.z += step_size
-    elif direction == "down":
-        target_pose.position.z -= step_size
-    elif direction == "left":
-        target_pose.position.y += step_size
-    elif direction == "right":
-        target_pose.position.y -= step_size
-    elif direction == "forward":
+    if direction == "pos_x":
         target_pose.position.x += step_size
-    elif direction == "backward":
+    elif direction == "neg_x":
         target_pose.position.x -= step_size
-    elif direction == "stop":
-        rospy.loginfo("Bewegung gestoppt.")
+    elif direction == "pos_y":
+        target_pose.position.y += step_size
+    elif direction == "neg_y":
+        target_pose.position.y -= step_size
+    elif direction == "pos_z":
+        target_pose.position.z += step_size
+    elif direction == "neg_z":
+        target_pose.position.z -= step_size
         return
 
     # Cartesian path planning

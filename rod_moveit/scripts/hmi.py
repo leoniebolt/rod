@@ -40,14 +40,11 @@ class RobotHMI(QWidget):
 
         ## Button labels mapped to commands
         self.buttons = {
-            '↑': 'up', '↓': 'down', '←': 'left', '→': 'right',
-            'Start': 'start', 'Stop': 'stop'
+            '+x': 'pos_x', '-x': 'neg_x', '+y': 'pos_y', '-y': 'neg_y', '+z': 'pos_z', '-z': 'neg_z'
         }
 
-        ## Grid positions for each button
         positions = {
-            '↑': (0, 1), '←': (1, 0), '→': (1, 2), '↓': (2, 1),
-            'Start': (4, 0), 'Stop': (4, 2)
+            '+x': (0, 1), '-x': (0, 2), '+y': (1, 1), '-y': (1, 2), '+z': (2,1), '-z':(2,2)
         }
 
         for label, pos in positions.items():
