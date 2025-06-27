@@ -2,6 +2,8 @@
 
 ## @file robot_hmi.py
 #  @brief Qt-based GUI for controlling a robot using ROS.
+#  @author Eeman, Felix, Leonie
+#  @date 2025-06-27
 
 import sys
 from PyQt5.QtWidgets import (
@@ -10,7 +12,6 @@ from PyQt5.QtWidgets import (
 )
 import rospy
 from std_msgs.msg import String
-
 
 ## @class RobotHMI
 #  @brief Eine einfache grafische Oberfläche zur Robotersteuerung
