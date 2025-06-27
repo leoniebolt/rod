@@ -1,13 +1,39 @@
-# Robotermodellierung (ROD)
-Modeling a robotic system with a scara, a pillar and a six axis robot for a university project.
-They should fulfill an industrial goal - putting packages into a box for a pharmaceutic use-case.
-One of the robot, in this case the six-axis-robot, should be able to be positioned via an HMI.
-They shall all work together in an automatic setup.
-All of them are visualized in gazebo and rviz.
+# ROD – Roboter-Station zur Verpackung und Palettierung
 
-# Setup:
-WSL ubuntu 20.04.
-ROS noetic
+## Projektbeschreibung
+
+Dieses Projekt simuliert eine Verpackungs- und Palettierstation in Gazebo unter ROS Noetic  
+Ziel ist es, eine Verpackungsline mit mehreren Robotern realitätsnah darzustellen:
+
+- Ein *SCARA-Roboter* verpackt Objekte von einem Förderband in eine Box.
+    
+- Ein weiterer Roboter setzt einen *Deckel* auf die befüllte Box.
+    
+- Ein *SixAxis-Roboter* (an ABB IRB 1100 angelehnt) stapelt die geschlossenen Boxen auf eine Palette.
+    
+
+Die Simulation basiert auf einem selbst erstellten URDF-Modell und wurde mit SolidWorks 2025 modelliert.
+
+---
+
+##  Systemvoraussetzungen
+
+## Systemvoraussetzungen
+
+- Betriebssystem: Ubuntu 20.04.6 LTS
+    
+- ROS: Noetic
+    
+- Python: 3.8.10
+    
+- Gazebo: 11.11.0
+    
+- RViz: 1.14.20 (aus ROS Noetic)
+    
+- MoveIt: 1.1.9
+    
+- CMake: 3.16.3
+---
 
 ## Specific Installations:
 ```bash
